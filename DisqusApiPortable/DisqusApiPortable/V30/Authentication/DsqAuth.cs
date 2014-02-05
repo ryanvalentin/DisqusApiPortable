@@ -13,20 +13,9 @@ namespace Disqus.Api.V30.Authentication
             this.AccessToken = accessToken;
         }
 
-        public DsqAuth(string apiKey, string remoteAuth = "")
+        public DsqAuth(string apiKey, string secretKey, string remoteAuth = "")
         {
             this.ApiKey = apiKey;
-            this.RemoteAuth = remoteAuth;
-        }
-
-        public DsqAuth(string secretKey, string accessToken = "")
-        {
-            this.ApiSecret = secretKey;
-            this.AccessToken = accessToken;
-        }
-
-        public DsqAuth(string secretKey, string remoteAuth = "")
-        {
             this.ApiSecret = secretKey;
             this.RemoteAuth = remoteAuth;
         }

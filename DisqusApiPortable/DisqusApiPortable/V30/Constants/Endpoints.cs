@@ -7,101 +7,101 @@ namespace Disqus.Api.V30.Constants
 {
     public static class Endpoints
     {
-        internal const string apiBase = "https://disqus.com/api/";
-        internal const string apiVersion = "3.0/";
-        internal const string resourceType = ".json";
+        private const string _apiBase = "https://disqus.com/api/";
+        private const string _apiVersion = "3.0/";
+        private const string _resourceType = ".json";
 
         public static class Applications
         {
             private const string _category = "applications/";
-            public const string ListUsage = apiBase + apiVersion + _category + "listUsage" + resourceType;
+            public const string ListUsage = _apiBase + _apiVersion + _category + "listUsage" + _resourceType;
         }
 
         public static class Blacklists
         {
             private const string _category = "blacklists/";
-            public const string Add = apiBase + apiVersion + _category + "add" + resourceType;
-            public const string List = apiBase + apiVersion + _category + "list" + resourceType;
-            public const string Remove = apiBase + apiVersion + _category + "remove" + resourceType;
+            public const string Add = _apiBase + _apiVersion + _category + "add" + _resourceType;
+            public const string List = _apiBase + _apiVersion + _category + "list" + _resourceType;
+            public const string Remove = _apiBase + _apiVersion + _category + "remove" + _resourceType;
         }
 
         public static class Forums
         {
             private const string _category = "forums/";
-            public const string AddModerator = apiBase + apiVersion + _category + "addModerator" + resourceType;
-            public const string Create = apiBase + apiVersion + _category + "create" + resourceType;
-            public const string Details = apiBase + apiVersion + _category + "details" + resourceType;
-            public const string Installed = apiBase + apiVersion + _category + "installed" + resourceType;
-            public const string ListModerators = apiBase + apiVersion + _category + "listModerators" + resourceType;
-            public const string ListMostActiveUsers = apiBase + apiVersion + _category + "listMostActiveUsers" + resourceType;
-            public const string ListMostLikedUsers = apiBase + apiVersion + _category + "listMostLikedUsers" + resourceType;
-            public const string ListPosts = apiBase + apiVersion + _category + "listPosts" + resourceType;
-            public const string ListThreads = apiBase + apiVersion + _category + "listThreads" + resourceType;
-            public const string ListUsers = apiBase + apiVersion + _category + "listUsers" + resourceType;
-            public const string RemoveModerator = apiBase + apiVersion + _category + "removeModerator" + resourceType;
+            public const string AddModerator = _apiBase + _apiVersion + _category + "addModerator" + _resourceType;
+            public const string Create = _apiBase + _apiVersion + _category + "create" + _resourceType;
+            public const string Details = _apiBase + _apiVersion + _category + "details" + _resourceType;
+            public const string Installed = _apiBase + _apiVersion + _category + "installed" + _resourceType;
+            public const string ListModerators = _apiBase + _apiVersion + _category + "listModerators" + _resourceType;
+            public const string ListMostActiveUsers = _apiBase + _apiVersion + _category + "listMostActiveUsers" + _resourceType;
+            public const string ListMostLikedUsers = _apiBase + _apiVersion + _category + "listMostLikedUsers" + _resourceType;
+            public const string ListPosts = _apiBase + _apiVersion + _category + "listPosts" + _resourceType;
+            public const string ListThreads = _apiBase + _apiVersion + _category + "listThreads" + _resourceType;
+            public const string ListUsers = _apiBase + _apiVersion + _category + "listUsers" + _resourceType;
+            public const string RemoveModerator = _apiBase + _apiVersion + _category + "removeModerator" + _resourceType;
         }
 
         public static class Posts
         {
             private const string _category = "posts/";
-            public const string Approve = apiBase + apiVersion + _category + "approve" + resourceType;
-            public const string Create = apiBase + apiVersion + _category + "create" + resourceType;
-            public const string Details = apiBase + apiVersion + _category + "details" + resourceType;
-            public const string GetContext = apiBase + apiVersion + _category + "getContext" + resourceType;
-            public const string List = apiBase + apiVersion + _category + "list" + resourceType;
-            public const string ListPopular = apiBase + apiVersion + _category + "listPopular" + resourceType;
-            public const string Remove = apiBase + apiVersion + _category + "remove" + resourceType;
-            public const string Report = apiBase + apiVersion + _category + "report" + resourceType;
-            public const string Restore = apiBase + apiVersion + _category + "restore" + resourceType;
-            public const string Spam = apiBase + apiVersion + _category + "spam" + resourceType;
-            public const string Update = apiBase + apiVersion + _category + "update" + resourceType;
-            public const string Vote = apiBase + apiVersion + _category + "vote" + resourceType;
+            public const string Approve = _apiBase + _apiVersion + _category + "approve" + _resourceType;
+            public const string Create = _apiBase + _apiVersion + _category + "create" + _resourceType;
+            public const string Details = _apiBase + _apiVersion + _category + "details" + _resourceType;
+            public const string GetContext = _apiBase + _apiVersion + _category + "getContext" + _resourceType;
+            public const string List = _apiBase + _apiVersion + _category + "list" + _resourceType;
+            public const string ListPopular = _apiBase + _apiVersion + _category + "listPopular" + _resourceType;
+            public const string Remove = _apiBase + _apiVersion + _category + "remove" + _resourceType;
+            public const string Report = _apiBase + _apiVersion + _category + "report" + _resourceType;
+            public const string Restore = _apiBase + _apiVersion + _category + "restore" + _resourceType;
+            public const string Spam = _apiBase + _apiVersion + _category + "spam" + _resourceType;
+            public const string Update = _apiBase + _apiVersion + _category + "update" + _resourceType;
+            public const string Vote = _apiBase + _apiVersion + _category + "vote" + _resourceType;
         }
 
         public static class Threads
         {
             private const string _category = "threads/";
-            public const string Close = apiBase + apiVersion + _category + "close" + resourceType;
-            public const string Create = apiBase + apiVersion + _category + "create" + resourceType;
-            public const string Details = apiBase + apiVersion + _category + "details" + resourceType;
-            public const string List = apiBase + apiVersion + _category + "list" + resourceType;
-            public const string ListHot = apiBase + apiVersion + _category + "listHot" + resourceType;
-            public const string ListPopular = apiBase + apiVersion + _category + "listPopular" + resourceType;
-            public const string ListPosts = apiBase + apiVersion + _category + "listPosts" + resourceType;
-            public const string Open = apiBase + apiVersion + _category + "open" + resourceType;
-            public const string Remove = apiBase + apiVersion + _category + "remove" + resourceType;
-            public const string Restore = apiBase + apiVersion + _category + "restore" + resourceType;
-            public const string Set = apiBase + apiVersion + _category + "set" + resourceType;
-            public const string Subscribe = apiBase + apiVersion + _category + "subscribe" + resourceType;
-            public const string Unsubscribe = apiBase + apiVersion + _category + "unsubscribe" + resourceType;
-            public const string Update = apiBase + apiVersion + _category + "update" + resourceType;
-            public const string Vote = apiBase + apiVersion + _category + "vote" + resourceType;
+            public const string Close = _apiBase + _apiVersion + _category + "close" + _resourceType;
+            public const string Create = _apiBase + _apiVersion + _category + "create" + _resourceType;
+            public const string Details = _apiBase + _apiVersion + _category + "details" + _resourceType;
+            public const string List = _apiBase + _apiVersion + _category + "list" + _resourceType;
+            public const string ListHot = _apiBase + _apiVersion + _category + "listHot" + _resourceType;
+            public const string ListPopular = _apiBase + _apiVersion + _category + "listPopular" + _resourceType;
+            public const string ListPosts = _apiBase + _apiVersion + _category + "listPosts" + _resourceType;
+            public const string Open = _apiBase + _apiVersion + _category + "open" + _resourceType;
+            public const string Remove = _apiBase + _apiVersion + _category + "remove" + _resourceType;
+            public const string Restore = _apiBase + _apiVersion + _category + "restore" + _resourceType;
+            public const string Set = _apiBase + _apiVersion + _category + "set" + _resourceType;
+            public const string Subscribe = _apiBase + _apiVersion + _category + "subscribe" + _resourceType;
+            public const string Unsubscribe = _apiBase + _apiVersion + _category + "unsubscribe" + _resourceType;
+            public const string Update = _apiBase + _apiVersion + _category + "update" + _resourceType;
+            public const string Vote = _apiBase + _apiVersion + _category + "vote" + _resourceType;
         }
 
         public static class Users
         {
             private const string _category = "users/";
-            public const string CheckUsername = apiBase + apiVersion + _category + "checkUsername" + resourceType;
-            public const string Details = apiBase + apiVersion + _category + "details" + resourceType;
-            public const string Follow = apiBase + apiVersion + _category + "follow" + resourceType;
-            public const string ListActiveForums = apiBase + apiVersion + _category + "listActiveForums" + resourceType;
-            public const string ListActiveThreads = apiBase + apiVersion + _category + "listActiveThreads" + resourceType;
-            public const string ListActivity = apiBase + apiVersion + _category + "listActivity" + resourceType;
-            public const string ListFollowers = apiBase + apiVersion + _category + "listFollowers" + resourceType;
-            public const string ListFollowing = apiBase + apiVersion + _category + "listFollowing" + resourceType;
-            public const string ListForums = apiBase + apiVersion + _category + "listForums" + resourceType;
-            public const string ListMostActiveForums = apiBase + apiVersion + _category + "listMostActiveForums" + resourceType;
-            public const string ListPosts = apiBase + apiVersion + _category + "listPosts" + resourceType;
-            public const string Unfollow = apiBase + apiVersion + _category + "unfollow" + resourceType;
-            public const string UpdateProfile = apiBase + apiVersion + _category + "updateProfile" + resourceType;
+            public const string CheckUsername = _apiBase + _apiVersion + _category + "checkUsername" + _resourceType;
+            public const string Details = _apiBase + _apiVersion + _category + "details" + _resourceType;
+            public const string Follow = _apiBase + _apiVersion + _category + "follow" + _resourceType;
+            public const string ListActiveForums = _apiBase + _apiVersion + _category + "listActiveForums" + _resourceType;
+            public const string ListActiveThreads = _apiBase + _apiVersion + _category + "listActiveThreads" + _resourceType;
+            public const string ListActivity = _apiBase + _apiVersion + _category + "listActivity" + _resourceType;
+            public const string ListFollowers = _apiBase + _apiVersion + _category + "listFollowers" + _resourceType;
+            public const string ListFollowing = _apiBase + _apiVersion + _category + "listFollowing" + _resourceType;
+            public const string ListForums = _apiBase + _apiVersion + _category + "listForums" + _resourceType;
+            public const string ListMostActiveForums = _apiBase + _apiVersion + _category + "listMostActiveForums" + _resourceType;
+            public const string ListPosts = _apiBase + _apiVersion + _category + "listPosts" + _resourceType;
+            public const string Unfollow = _apiBase + _apiVersion + _category + "unfollow" + _resourceType;
+            public const string UpdateProfile = _apiBase + _apiVersion + _category + "updateProfile" + _resourceType;
         }
 
         public static class Whitelists
         {
             private const string _category = "whitelists/";
-            public const string Add = apiBase + apiVersion + _category + "add" + resourceType;
-            public const string List = apiBase + apiVersion + _category + "list" + resourceType;
-            public const string Remove = apiBase + apiVersion + _category + "remove" + resourceType;
+            public const string Add = _apiBase + _apiVersion + _category + "add" + _resourceType;
+            public const string List = _apiBase + _apiVersion + _category + "list" + _resourceType;
+            public const string Remove = _apiBase + _apiVersion + _category + "remove" + _resourceType;
         }
     }
 }

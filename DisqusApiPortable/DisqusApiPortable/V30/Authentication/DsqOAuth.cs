@@ -29,7 +29,7 @@ namespace Disqus.Api.V30.Authentication
 
         public async Task<DsqAuth> RequestAccessTokenAsync(string code, string apiSecret)
         {
-
+            return new DsqAuth("");
         }
 
         private string GetScope(Scopes scope)

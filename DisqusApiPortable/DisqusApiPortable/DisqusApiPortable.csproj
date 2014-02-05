@@ -11,7 +11,7 @@
     <RootNamespace>Disqus.Api</RootNamespace>
     <AssemblyName>DisqusApiPortable</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Profile136</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile147</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <FileUpgradeFlags>
@@ -54,7 +54,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Folder Include="V30\Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
@@ -66,7 +65,27 @@
     <Compile Include="V30\Authentication\Scopes.cs" />
     <Compile Include="V30\Constants\Endpoints.cs" />
     <Compile Include="V30\DisqusApiClient.cs" />
-    <Compile Include="V30\IDisqusApiClient.cs" />
+    <Compile Include="V30\DsqApiException.cs" />
+    <Compile Include="V30\Models\DsqApproxLoc.cs" />
+    <Compile Include="V30\Models\DsqAvatar.cs" />
+    <Compile Include="V30\Models\DsqCursor.cs" />
+    <Compile Include="V30\Models\DsqForum.cs" />
+    <Compile Include="V30\Models\DsqMedia.cs" />
+    <Compile Include="V30\Models\DsqPost.cs" />
+    <Compile Include="V30\Models\DsqPostExpanded.cs" />
+    <Compile Include="V30\Models\DsqPostThreaded.cs" />
+    <Compile Include="V30\Models\DsqResponseBase.cs" />
+    <Compile Include="V30\Models\DsqThreadBase.cs" />
+    <Compile Include="V30\Models\DsqThreadCollapsed.cs" />
+    <Compile Include="V30\Models\DsqThreadExpanded.cs" />
+    <Compile Include="V30\Models\DsqThreadTopPost.cs" />
+    <Compile Include="V30\Models\DsqUser.cs" />
+    <Compile Include="V30\Models\DsqUserDetails.cs" />
+    <Compile Include="V30\Models\DsqUserForumActive.cs" />
+    <Compile Include="V30\Models\IDsqListResponse.cs" />
+    <Compile Include="V30\Models\IDsqPost.cs" />
+    <Compile Include="V30\Models\IDsqThread.cs" />
+    <Compile Include="V30\Models\IDsqUser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
