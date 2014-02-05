@@ -129,7 +129,43 @@ namespace Disqus.Api.V30
             return DeserializeStreamToObjectAsync<DsqListResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
         }
 
-        public async Task<
+        /// <summary>
+        /// Returns a list of users active within a forum ordered by most comments made.
+        /// </summary>
+        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <returns>List containing most active usesr on a forum</returns>
+        /// <exception cref="System.ArgumentException">A required argument was missing or invalid</exception>
+        public async Task<DsqListCursorResponse<DsqUserForumActive>> ListMostActiveForumUsersAsync(string forum, string cursor = "")
+        {
+            string endpoint = Constants.Endpoints.Forums.ListMostActiveUsers
+                + GetAuthentication()
+                + GetArgument("forum", forum, true)
+                + GetArgument("cursor", cursor, false);
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUserForumActive>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a list of users active within a forum ordered by most comments made.
+        /// </summary>
+        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="limit">Defaults to 25. Maximum value of 100</param>
+        /// <param name="order">Defaults to "asc" Choices: desc</param>
+        /// <returns>List containing most active usesr on a forum</returns>
+        /// <exception cref="System.ArgumentException">A required argument was missing or invalid</exception>
+        public async Task<DsqListCursorResponse<DsqUserForumActive>> ListMostActiveForumUsersAsync(string forum, string cursor = "", int limit = 25, string order = "asc")
+        {
+            string endpoint = Constants.Endpoints.Forums.ListMostActiveUsers
+                + GetAuthentication()
+                + GetArgument("forum", forum, true)
+                + GetArgument("cursor", cursor, false)
+                + GetArgument("limit", ClampLimit(limit).ToString(), false)
+                + GetArgument("order", order, false);
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUserForumActive>>(await GetDataStreamAsync(endpoint));
+        }
 
         #endregion
 
@@ -280,9 +316,16 @@ namespace Disqus.Api.V30
         {
             bool hasValue = String.IsNullOrWhiteSpace(value);
 
+            //
+            // Validate the arguments to make sure they're populated if required, or a valid value
             if (required && !hasValue)
                 throw new ArgumentException(String.Format("Argument {0} is required. Was: {1}", key, value));
 
+            if (key == "order" && (value != "asc" || value != "desc"))
+                throw new ArgumentException("Invalid value for argument 'order'. Must be 'asc' or 'desc'");
+
+            //
+            // Return final value if there is one
             if (hasValue)
                 return String.Format("&{0}={1}", key, value);
 
@@ -316,6 +359,20 @@ namespace Disqus.Api.V30
 
             return existingList;
         }
+
+        #region Utilities
+
+        private int ClampLimit(int limit)
+        {
+            if (limit <= 0)
+                return 1;
+            else if (limit >= 100)
+                return 100;
+
+            return limit;
+        }
+
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propertyName)
