@@ -46,6 +46,6 @@ namespace Disqus.Api.V30.Models
         }
 
         [JsonProperty(PropertyName = "parent")]
-        public int? Parent { get; set; }
+        public long? Parent { get; set; }
     }
 }

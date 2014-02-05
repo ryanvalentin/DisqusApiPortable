@@ -82,6 +82,7 @@
     <Compile Include="V30\Models\DsqUser.cs" />
     <Compile Include="V30\Models\DsqUserDetails.cs" />
     <Compile Include="V30\Models\DsqUserForumActive.cs" />
+    <Compile Include="V30\Models\DsqVoteObject.cs" />
     <Compile Include="V30\Models\IDsqListResponse.cs" />
     <Compile Include="V30\Models\IDsqPost.cs" />
     <Compile Include="V30\Models\IDsqThread.cs" />
