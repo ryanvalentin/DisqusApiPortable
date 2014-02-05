@@ -134,7 +134,7 @@ namespace Disqus.Api.V30
         /// </summary>
         /// <param name="forum">Looks up a forum by ID (aka short name)</param>
         /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
-        /// <returns>List containing most active usesr on a forum</returns>
+        /// <returns>List containing most active users on a forum</returns>
         /// <exception cref="System.ArgumentException">A required argument was missing or invalid</exception>
         public async Task<DsqListCursorResponse<DsqUserForumActive>> ListMostActiveForumUsersAsync(string forum, string cursor = "")
         {
@@ -153,7 +153,7 @@ namespace Disqus.Api.V30
         /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
         /// <param name="limit">Defaults to 25. Maximum value of 100</param>
         /// <param name="order">Defaults to "asc" Choices: desc</param>
-        /// <returns>List containing most active usesr on a forum</returns>
+        /// <returns>List containing most active users on a forum</returns>
         /// <exception cref="System.ArgumentException">A required argument was missing or invalid</exception>
         public async Task<DsqListCursorResponse<DsqUserForumActive>> ListMostActiveForumUsersAsync(string forum, string cursor = "", int limit = 25, string order = "asc")
         {
@@ -165,6 +165,44 @@ namespace Disqus.Api.V30
                 + GetArgument("order", order, false);
 
             return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUserForumActive>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a list of users active within a forum ordered by most likes received.
+        /// </summary>
+        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <returns>List containing most liked (upvoted) users on a forum</returns>
+        /// <exception cref="System.ArgumentException">A required argument was missing or invalid</exception>
+        public async Task<DsqListCursorResponse<DsqUser>> ListMostLikedForumUsersAsync(string forum, string cursor = "")
+        {
+            string endpoint = Constants.Endpoints.Forums.ListMostLikedUsers
+                + GetAuthentication()
+                + GetArgument("forum", forum, true)
+                + GetArgument("cursor", cursor, false);
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a list of users active within a forum ordered by most likes received.
+        /// </summary>
+        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="limit">Defaults to 25. Maximum value of 100</param>
+        /// <param name="order">Defaults to "asc" Choices: desc</param>
+        /// <returns>List containing most liked (upvoted) users on a forum</returns>
+        /// <exception cref="System.ArgumentException">A required argument was missing or invalid</exception>
+        public async Task<DsqListCursorResponse<DsqUser>> ListMostLikedForumUsersAsync(string forum, string cursor = "", int limit = 25, string order = "asc")
+        {
+            string endpoint = Constants.Endpoints.Forums.ListMostLikedUsers
+                + GetAuthentication()
+                + GetArgument("forum", forum, true)
+                + GetArgument("cursor", cursor, false)
+                + GetArgument("limit", ClampLimit(limit).ToString(), false)
+                + GetArgument("order", order, false);
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
         }
 
         #endregion
