@@ -1,18 +1,16 @@
-﻿using System;
+﻿using Disqus.Api.V30.Authentication;
+using Disqus.Api.V30.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using Disqus.Api.V30.Authentication;
-using System.ComponentModel;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Disqus.Api.V30.Models;
-using System.IO;
-using Newtonsoft.Json.Linq;
-using System.Net;
 using System.Net.NetworkInformation;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace Disqus.Api.V30
 {
@@ -26,8 +24,6 @@ namespace Disqus.Api.V30
         }
 
         public DsqAuth DisqusAuthentication { get; set; }
-
-        private string _host { get; set; }
 
         #region Applications endpoints
 
@@ -1111,6 +1107,32 @@ namespace Disqus.Api.V30
             return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUserDetails>>(await GetDataStreamAsync(endpoint));
         }
 
+        /// <summary>
+        /// Follows a target user
+        /// </summary>
+        /// <param name="target">The target user to follow. You may look up a user by username using the 'username' query type.</param>
+        /// <returns></returns>
+        public async Task<DsqObjectResponse<DsqUser>> FollowUserAsync(string target)
+        {
+            List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
+            arguments = PostArgument(arguments, "target", target, true);
+
+            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUser>>(await PostDataStreamAsync(Constants.Endpoints.Users.Follow, arguments));
+        }
+
+        /// <summary>
+        /// Unfollows a target user
+        /// </summary>
+        /// <param name="target">The target user to unfollow. You may look up a user by username using the 'username' query type.</param>
+        /// <returns></returns>
+        public async Task<DsqObjectResponse<DsqUser>> UnfollowUserAsync(string target)
+        {
+            List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
+            arguments = PostArgument(arguments, "target", target, true);
+
+            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUser>>(await PostDataStreamAsync(Constants.Endpoints.Users.Unfollow, arguments));
+        }
+
         #endregion
 
         #region Whitelists endpoints
@@ -1124,6 +1146,7 @@ namespace Disqus.Api.V30
         private readonly HttpClient _httpClient { get; set; }
         private string _currentClientMethod { get; set; }
         private Uri _referrer { get; set; }
+        private string _host { get; set; }
         
         private async Task<StreamReader> GetDataStreamAsync(string endpoint)
         {
