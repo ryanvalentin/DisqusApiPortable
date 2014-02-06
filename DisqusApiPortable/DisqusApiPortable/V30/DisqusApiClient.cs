@@ -25,6 +25,8 @@ namespace Disqus.Api.V30
 
         public DsqAuth DisqusAuthentication { get; set; }
 
+        #region API Methods
+
         #region Applications endpoints
 
         // TODO
@@ -1082,6 +1084,7 @@ namespace Disqus.Api.V30
         /// </summary>
         /// <param name="new_username">The Disqus username the user wants to change it to</param>
         /// <returns>The updated user object</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqObjectResponse<DsqUser>> UpdateUsernameAsync(string new_username)
         {
             if (new_username.Length < 3 || new_username.Length > 30)
@@ -1098,6 +1101,7 @@ namespace Disqus.Api.V30
         /// </summary>
         /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type</param>
         /// <returns>Object containing extended details of a user</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqObjectResponse<DsqUserDetails>> GetUserDetailsAsync(string user = "")
         {
             string endpoint = Constants.Endpoints.Users.Details
@@ -1112,6 +1116,7 @@ namespace Disqus.Api.V30
         /// </summary>
         /// <param name="target">The target user to follow. You may look up a user by username using the 'username' query type.</param>
         /// <returns></returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqObjectResponse<DsqUser>> FollowUserAsync(string target)
         {
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
@@ -1125,12 +1130,172 @@ namespace Disqus.Api.V30
         /// </summary>
         /// <param name="target">The target user to unfollow. You may look up a user by username using the 'username' query type.</param>
         /// <returns></returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqObjectResponse<DsqUser>> UnfollowUserAsync(string target)
         {
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "target", target, true);
 
             return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUser>>(await PostDataStreamAsync(Constants.Endpoints.Users.Unfollow, arguments));
+        }
+
+        /// <summary>
+        /// Returns a list of forums a user has been active on.
+        /// </summary>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="limit">Maximum value of 100</param>
+        /// <param name="order">Choices: asc, desc</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <returns>A list of forums the user has been active on, sorted by when the forum was created</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        public async Task<DsqListCursorResponse<DsqForum>> ListUsersActiveForumsAsync(string cursor = "", int limit = 25, string order = "asc", string user = "")
+        {
+            string endpoint = Constants.Endpoints.Users.ListActiveForums
+                + GetAuthentication()
+                + GetArgument("cursor", cursor)
+                + GetArgument("limit", ClampLimit(limit))
+                + GetArgument("order", order)
+                + GetArgument("user", user);
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqForum>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a list of forums a user has been active on recenty, sorted by the user's activity.
+        /// </summary>
+        /// <param name="limit">Maximum value of 100</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <returns>Non-paginated list of user's most active forums</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        public async Task<DsqListResponse<DsqForum>> ListUsersMostActiveForumsAsync(int limit = 25, string user = "")
+        {
+            string endpoint = Constants.Endpoints.Users.ListMostActiveForums
+                + GetAuthentication()
+                + GetArgument("limit", ClampLimit(limit))
+                + GetArgument("user", user);
+
+            return DeserializeStreamToObjectAsync<DsqListResponse<DsqForum>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a list of threads a user has participated in sorted by last activity.
+        /// </summary>
+        /// <param name="forums">Looks up a forum by ID (aka short name)</param>
+        /// <param name="include">Choices: open, closed, killed</param>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="limit">Maximum value of 100</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="order">Choices: asc, desc</param>
+        /// <returns>List of threads the user has either commented on or favorited</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        public async Task<DsqListCursorResponse<DsqThreadExpanded>> ListUsersActiveThreadsAsync(List<string> forums, List<string> include, string cursor = "", int limit = 25, string user = "", string order = "desc")
+        {
+            string endpoint = Constants.Endpoints.Users.ListActiveThreads
+                + GetAuthentication()
+                + GetArgument("related", "forum")
+                + GetArgument("related", "author")
+                + GetArgument("cursor", cursor)
+                + GetArgument("order", order)
+                + GetArgument("limit", ClampLimit(limit))
+                + GetArgument("user", user);
+
+            foreach (var i in include)
+            {
+                endpoint += GetArgument("include", i);
+            }
+
+            foreach (var f in forums)
+            {
+                endpoint += GetArgument("forum", f);
+            }
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqThreadExpanded>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a list of users a user is being followed by.
+        /// </summary>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="limit">Maximum value of 100</param>
+        /// <param name="order">Choices: asc, desc</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <returns>Returns a list of users a user is being followed by.</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        public async Task<DsqListCursorResponse<DsqUser>> ListUsersFollowersAsync(string cursor = "", int limit = 25, string order = "asc", string user = "")
+        {
+            string endpoint = Constants.Endpoints.Users.ListFollowers
+                + GetAuthentication()
+                + GetArgument("cursor", cursor)
+                + GetArgument("order", order)
+                + GetArgument("limit", ClampLimit(limit))
+                + GetArgument("user", user);
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a list of users a user is following.
+        /// </summary>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="limit">Maximum value of 100</param>
+        /// <param name="order">Choices: asc, desc</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <returns>Returns a list of users a user is following.</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        public async Task<DsqListCursorResponse<DsqUser>> ListUsersFollowingAsync(string cursor = "", int limit = 25, string order = "asc", string user = "")
+        {
+            string endpoint = Constants.Endpoints.Users.ListFollowing
+                + GetAuthentication()
+                + GetArgument("cursor", cursor)
+                + GetArgument("order", order)
+                + GetArgument("limit", ClampLimit(limit))
+                + GetArgument("user", user);
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a list of forums a user owns.
+        /// </summary>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="limit">Maximum value of 100</param>
+        /// <param name="order">Choices: asc, desc</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <returns>Returns a list of forums a user owns.</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        public async Task<DsqListCursorResponse<DsqForum>> ListUsersForumsAsync(string cursor = "", int limit = 25, string order = "asc", string user = "")
+        {
+            string endpoint = Constants.Endpoints.Users.ListForums
+                + GetAuthentication()
+                + GetArgument("cursor", cursor)
+                + GetArgument("order", order)
+                + GetArgument("limit", ClampLimit(limit))
+                + GetArgument("user", user);
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqForum>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Updates user profile. All fields are optional, but any field not present will be updated as blank.
+        /// </summary>
+        /// <param name="name">Non-unique display name for the user</param>
+        /// <param name="about">Short bio about user</param>
+        /// <param name="location">User's location. Maximum length of 255</param>
+        /// <param name="url">URL (defined by RFC 3986)</param>
+        /// <returns>The updated user object</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        public async Task<DsqObjectResponse<DsqUser>> UpdateUserProfileAsync(string name, string about, string location, Uri url)
+        {
+            if (name.Length < 2 || name.Length > 30)
+                throw new DsqApiException("New name doesn't satisfy length requirements, must be 2 or more characters and up to 30. Was: " + name.Length.ToString(), 2);
+
+            List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
+            arguments = PostArgument(arguments, "name", name);
+            arguments = PostArgument(arguments, "about", about);
+            arguments = PostArgument(arguments, "location", location);
+            arguments = PostArgument(arguments, "url", url.OriginalString);
+
+            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUser>>(await PostDataStreamAsync(Constants.Endpoints.Users.ListForums, arguments));
         }
 
         #endregion
@@ -1141,9 +1306,11 @@ namespace Disqus.Api.V30
 
         #endregion
 
+        #endregion
+
         #region HTTP Client
 
-        private readonly HttpClient _httpClient { get; set; }
+        private HttpClient _httpClient { get; set; }
         private string _currentClientMethod { get; set; }
         private Uri _referrer { get; set; }
         private string _host { get; set; }
@@ -1155,7 +1322,9 @@ namespace Disqus.Api.V30
 
             if (_httpClient == null || _currentClientMethod == "POST")
             {
-                _httpClient.Dispose();
+                if (_httpClient != null)
+                    _httpClient.Dispose();
+
                 _httpClient = BuildHttpClient();
             }
 
@@ -1286,15 +1455,15 @@ namespace Disqus.Api.V30
             return authQuery;
         }
 
-        private const string[] _validIntervals = { "1h", "6h", "12h", "1d", "3d", "7d", "30d", "60d", "90d" };
+        private string[] _validIntervals = { "1h", "6h", "12h", "1d", "3d", "7d", "30d", "60d", "90d" };
 
-        private const string[] _validInclude = { "asc", "desc", "popular", "best" };
+        private string[] _validInclude = { "asc", "desc", "popular", "best" };
 
-        private const string[] _validOrders = { "approved", "unapproved", "flagged", "deleted", "spam", "open", "closed", "killed" };
+        private string[] _validOrders = { "approved", "unapproved", "flagged", "deleted", "spam", "open", "closed", "killed" };
 
         private string GetArgument(string key, string value, bool required = false)
         {
-            bool hasValue = String.IsNullOrWhiteSpace(value);
+            bool hasValue = !String.IsNullOrWhiteSpace(value);
 
             //
             // Validate the arguments to make sure they're populated if required, or a valid value

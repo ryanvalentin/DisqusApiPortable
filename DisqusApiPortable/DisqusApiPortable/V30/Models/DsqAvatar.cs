@@ -6,7 +6,7 @@ namespace Disqus.Api.V30.Models
     /// <summary>
     /// Base avatar class for a user
     /// </summary>
-    public class DsqAvatar : INotifyPropertyChanged
+    public class DsqAvatar
     {
         [JsonProperty(PropertyName = "small")]
         public DsqSmall Small { get; set; }

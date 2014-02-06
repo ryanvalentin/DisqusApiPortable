@@ -69,8 +69,20 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        private bool _isAnonymous;
         [JsonProperty(PropertyName = "isAnonymous")]
-        public bool IsAnonymous { get; set; }
+        public bool IsAnonymous
+        {
+            get { return _isAnonymous; }
+            set
+            {
+                if (value != _isAnonymous)
+                {
+                    _isAnonymous = value;
+                    this.NotifyPropertyChanged("IsAnonymous");
+                }
+            }
+        }
 
         private bool _isFollowing;
         [JsonProperty(PropertyName = "isFollowing")]

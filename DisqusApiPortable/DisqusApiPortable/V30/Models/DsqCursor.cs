@@ -6,7 +6,7 @@ namespace Disqus.Api.V30.Models
     /// <summary>
     /// Generic cursor class
     /// </summary>
-    public class DsqCursor : INotifyPropertyChanged
+    public class DsqCursor
     {
         [JsonProperty(PropertyName = "prev")]
         public string Prev { get; set; }
