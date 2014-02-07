@@ -68,6 +68,7 @@
     <Compile Include="V30\Models\DsqApproxLoc.cs" />
     <Compile Include="V30\Models\DsqAvatar.cs" />
     <Compile Include="V30\Models\DsqCursor.cs" />
+    <Compile Include="V30\Models\DsqFilter.cs" />
     <Compile Include="V30\Models\DsqForum.cs" />
     <Compile Include="V30\Models\DsqMedia.cs" />
     <Compile Include="V30\Models\DsqPost.cs" />

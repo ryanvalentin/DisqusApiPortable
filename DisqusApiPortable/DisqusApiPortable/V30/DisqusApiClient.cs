@@ -1247,7 +1247,98 @@ namespace Disqus.Api.V30
 
         #region Whitelists endpoints
 
-        // TODO
+        /// <summary>
+        /// Adds an entry to the whitelist. Authenticated user must have moderator privileges on the forum.
+        /// </summary>
+        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
+        /// <param name="email">Email address (defined by RFC 5322)</param>
+        /// <param name="notes">Maximum length of 50</param>
+        /// <returns>List containing the objects added to the whitelist</returns>
+        public async Task<DsqListResponse<DsqFilter>> AddToWhitelistAsync(string forum, string email, string notes = "")
+        {
+            return await PostToWhitelistAsync("add", forum, email, notes);
+        }
+
+        /// <summary>
+        /// Adds an entry to the whitelist. Authenticated user must have moderator privileges on the forum.
+        /// </summary>
+        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
+        /// <param name="email">Email address (defined by RFC 5322)</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="notes">Maximum length of 50</param>
+        /// <returns>List containing the objects added to the whitelist</returns>
+        public async Task<DsqListResponse<DsqFilter>> AddToWhitelistAsync(string forum, string email, string user, string notes = "")
+        {
+            return await PostToWhitelistAsync("add", forum, email, user, notes);
+        }
+
+        /// <summary>
+        /// Removes an entry from the whitelist.
+        /// </summary>
+        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
+        /// <param name="email">Email address (defined by RFC 5322)</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <returns>A list of objects removed from the whitelist</returns>
+        public async Task<DsqListResponse<DsqFilter>> RemoveFromWhitelistAsync(string forum, string email = "", string user = "")
+        {
+            return await PostToWhitelistAsync("remove", forum, email, user);
+        }
+
+        /// <summary>
+        /// Private method to add or remove from whitelist
+        /// </summary>
+        private async Task<DsqListResponse<DsqFilter>> PostToWhitelistAsync(string method, string forum, string email = "", string user = "", string notes = "")
+        {
+            List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
+            arguments = PostArgument(arguments, "forum", forum, true);
+            arguments = PostArgument(arguments, "email", email);
+            arguments = PostArgument(arguments, "user", user);
+
+            if (method == "add")
+            {
+                arguments = PostArgument(arguments, "notes", notes);
+                return DeserializeStreamToObjectAsync<DsqListResponse<DsqFilter>>(await PostDataStreamAsync(Constants.Endpoints.Whitelists.Add, arguments));
+            }
+            else if (method == "remove")
+            {
+                return DeserializeStreamToObjectAsync<DsqListResponse<DsqFilter>>(await PostDataStreamAsync(Constants.Endpoints.Whitelists.Remove, arguments));
+            }
+
+            throw new ArgumentOutOfRangeException("method", "Method must either be 'add' or 'remove'");
+        }
+
+        /// <summary>
+        /// Returns a list of all whitelist entries.
+        /// </summary>
+        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="limit">Maximum value of 100</param>
+        /// <param name="order">Choices: asc, desc</param>
+        /// <param name="query">Search term to look up entries</param>
+        /// <param name="since_id">ID to start showing entries from</param>
+        /// <param name="include_email">Whether to include email whitelist entries</param>
+        /// <param name="include_users">Whether to include user whitelist entries</param>
+        /// <returns>Returns a list of all whitelist entries.</returns>
+        public async Task<DsqListCursorResponse<DsqFilter>> ListForumWhitelistAsync(string forum, string cursor = "", int limit = 25, string order = "asc", string query = "", string since_id = "", bool include_email = true, bool include_users = true)
+        {
+            string endpoint = Constants.Endpoints.Whitelists.List
+                + GetAuthentication(true)
+                + GetArgument("forum", forum)
+                + GetArgument("cursor", cursor)
+                + GetArgument("order", order)
+                + GetArgument("query", query)
+                + GetArgument("limit", ClampLimit(limit))
+                + GetArgument("since_id", since_id);
+
+            if (include_email)
+                endpoint += GetArgument("type", "email");
+
+            if (include_users)
+                endpoint += GetArgument("type", "user");
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqFilter>>(await GetDataStreamAsync(endpoint));
+        }
+
 
         #endregion
 
