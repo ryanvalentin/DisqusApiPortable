@@ -1,6 +1,6 @@
-# Portable Disqus API wrapper
+# Disqus API Portable
 
-This is a wrapper for the Disqus public API, documented here: http://disqus.com/api/docs/
+This is a portable class library for the Disqus public API, documented here: http://disqus.com/api/docs/
 
 Note: This is a work-in-progress
 
@@ -18,7 +18,7 @@ Note: This is a work-in-progress
 
 ## Installation
 
-Clone and reference the project, if you dare. Will be on NuGet when complete.
+Clone and reference the project, if you dare. Will be on NuGet later.
 
 ## Basic terminology
 
@@ -46,7 +46,7 @@ A user who has authenticated with Disqus or any of the social logins. API data w
     // List comments in a thread
     try
     {
-        var response = await dsqClient.ListThreadPostsAsync("DISQUS_THREAD_ID", new List<string>(new string[] { "approved" }));
+        var response = await dsqClient.ListThreadPostsAsync("2230766078", new List<string>(new string[] { "approved" }));
     }
     catch (DsqApiException ex)
     {
