@@ -18,7 +18,7 @@ namespace Disqus.Api.V30.Models
 
                     //
                     // Set forum ID manually for interface consistency
-                    this.DisqusAuthorId = _forum.Id;
+                    this.DisqusAuthorId = _author.Id;
                 }
             }
         }

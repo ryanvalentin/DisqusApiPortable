@@ -54,7 +54,7 @@ namespace Disqus.Api.V30
             arguments = PostArgument(arguments, "user", user, true);
             arguments = PostArgument(arguments, "forum", forum, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<Dictionary<string, long?>>>(await PostDataStreamAsync(Constants.Endpoints.Forums.Details, arguments));
+            return DeserializeStreamToObjectAsync<DsqObjectResponse<Dictionary<string, long?>>>(await PostDataStreamAsync(Constants.Endpoints.Forums.AddModerator, arguments));
         }
 
         /// <summary>
@@ -125,54 +125,19 @@ namespace Disqus.Api.V30
         /// </summary>
         /// <param name="forum">Looks up a forum by ID (aka short name)</param>
         /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
-        /// <returns>List containing most active users on a forum</returns>
-        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task<DsqListCursorResponse<DsqUserForumActive>> ListMostActiveForumUsersAsync(string forum, string cursor = "")
-        {
-            string endpoint = Constants.Endpoints.Forums.ListMostActiveUsers
-                + GetAuthentication()
-                + GetArgument("forum", forum, true)
-                + GetArgument("cursor", cursor);
-
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUserForumActive>>(await GetDataStreamAsync(endpoint));
-        }
-
-        /// <summary>
-        /// Returns a list of users active within a forum ordered by most comments made
-        /// </summary>
-        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
-        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
         /// <param name="limit">Defaults to 25. Maximum value of 100</param>
         /// <param name="order">Defaults to "asc" Choices: desc</param>
         /// <returns>List containing most active users on a forum</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task<DsqListCursorResponse<DsqUserForumActive>> ListMostActiveForumUsersAsync(string forum, string cursor = "", int limit = 25, string order = "asc")
+        public async Task<DsqListCursorResponse<DsqUserForumActive>> ListMostActiveForumUsersAsync(string forum, string cursor = "", int limit = 25)
         {
             string endpoint = Constants.Endpoints.Forums.ListMostActiveUsers
                 + GetAuthentication()
                 + GetArgument("forum", forum, true)
                 + GetArgument("cursor", cursor)
-                + GetArgument("limit", ClampLimit(limit))
-                + GetArgument("order", order);
+                + GetArgument("limit", ClampLimit(limit));
 
             return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUserForumActive>>(await GetDataStreamAsync(endpoint));
-        }
-
-        /// <summary>
-        /// Returns a list of users active within a forum ordered by most likes received
-        /// </summary>
-        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
-        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
-        /// <returns>List containing most liked (upvoted) users on a forum</returns>
-        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task<DsqListCursorResponse<DsqUser>> ListMostLikedForumUsersAsync(string forum, string cursor = "")
-        {
-            string endpoint = Constants.Endpoints.Forums.ListMostLikedUsers
-                + GetAuthentication()
-                + GetArgument("forum", forum, true)
-                + GetArgument("cursor", cursor);
-
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
         }
 
         /// <summary>
@@ -184,31 +149,13 @@ namespace Disqus.Api.V30
         /// <param name="order">Defaults to "asc" Choices: desc</param>
         /// <returns>List containing most liked (upvoted) users on a forum</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task<DsqListCursorResponse<DsqUser>> ListMostLikedForumUsersAsync(string forum, string cursor = "", int limit = 25, string order = "asc")
+        public async Task<DsqListCursorResponse<DsqUser>> ListMostLikedForumUsersAsync(string forum, string cursor = "", int limit = 25)
         {
             string endpoint = Constants.Endpoints.Forums.ListMostLikedUsers
                 + GetAuthentication()
                 + GetArgument("forum", forum, true)
                 + GetArgument("cursor", cursor)
-                + GetArgument("limit", ClampLimit(limit))
-                + GetArgument("order", order);
-
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
-        }
-
-        /// <summary>
-        /// Returns a list of users active within a forum
-        /// </summary>
-        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
-        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
-        /// <returns>List of users who have participated on a forum, sorted by global ID</returns>
-        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task<DsqListCursorResponse<DsqUser>> ListForumUsersAsync(string forum, string cursor = "")
-        {
-            string endpoint = Constants.Endpoints.Forums.ListUsers
-                + GetAuthentication()
-                + GetArgument("forum", forum, true)
-                + GetArgument("cursor", cursor);
+                + GetArgument("limit", ClampLimit(limit));
 
             return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
         }
@@ -245,7 +192,7 @@ namespace Disqus.Api.V30
         public async Task<DsqObjectResponse<Dictionary<string, long?>>> RemoveModeratorFromForumAsync(string moderator_id)
         {
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
-            arguments = PostArgument(arguments, "moderator_id", moderator_id, true);
+            arguments = PostArgument(arguments, "moderator", moderator_id, true);
 
             return DeserializeStreamToObjectAsync<DsqObjectResponse<Dictionary<string, long?>>>(await PostDataStreamAsync(Constants.Endpoints.Forums.RemoveModerator, arguments));
         }
@@ -769,7 +716,7 @@ namespace Disqus.Api.V30
         /// <param name="order">Defaults to "desc". Choices: asc, desc</param>
         /// <returns>List of threads that satisfy the arguments</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task<DsqListCursorResponse<DsqThreadExpanded>> ListThreadsAsync(List<string> forums, List<string> thread_ids, List<string> authors, List<string> include, string cursor = "", int limit = 25, DateTime? since = null, string order = "dsc")
+        public async Task<DsqListCursorResponse<DsqThreadExpanded>> ListThreadsAsync(List<string> forums, List<string> thread_ids, List<string> authors, List<string> include, string cursor = "", int limit = 25, DateTime? since = null, string order = "desc")
         {
             string endpoint = Constants.Endpoints.Threads.List
                 + GetAuthentication()
@@ -923,10 +870,8 @@ namespace Disqus.Api.V30
         /// </summary>
         private async Task<DsqListCursorResponse<DsqPostThreaded>> GetThreadPostsAsync(string thread, List<string> include, string forum, string order, string cursor, int limit)
         {
-            string endpoint = Constants.Endpoints.Threads.ListPopular
+            string endpoint = Constants.Endpoints.Threads.ListPosts
                 + GetAuthentication()
-                + GetArgument("related", "forum")
-                + GetArgument("related", "author")
                 + GetArgument("thread", thread)
                 + GetArgument("forum", forum)
                 + GetArgument("cursor", cursor)
@@ -1358,7 +1303,9 @@ namespace Disqus.Api.V30
 
             if (_httpClient == null || _currentClientMethod == "GET")
             {
-                _httpClient.Dispose();
+                if (_httpClient != null)
+                    _httpClient.Dispose();
+
                 _httpClient = BuildHttpClient(true);
             }
 
@@ -1457,9 +1404,9 @@ namespace Disqus.Api.V30
 
         private string[] _validIntervals = { "1h", "6h", "12h", "1d", "3d", "7d", "30d", "60d", "90d" };
 
-        private string[] _validInclude = { "asc", "desc", "popular", "best" };
+        private string[] _validOrders = { "asc", "desc", "popular", "best" };
 
-        private string[] _validOrders = { "approved", "unapproved", "flagged", "deleted", "spam", "open", "closed", "killed" };
+        private string[] _validInclude= { "approved", "unapproved", "flagged", "deleted", "spam", "open", "closed", "killed" };
 
         private string GetArgument(string key, string value, bool required = false)
         {
@@ -1470,22 +1417,21 @@ namespace Disqus.Api.V30
             if (required && !hasValue)
                 throw new DsqApiException(String.Format("Argument '{0}' is required. Was: '{1}'", key, value), 2);
 
-            if (key == "order" && !_validOrders.Contains(value))
-                throw new DsqApiException("Invalid value for argument 'order'. Must be 'asc' or 'desc', or if requesting popular posts, must be 'popular' or 'best'", 2);
-
-            if (key == "include" && !_validInclude.Contains(value))
-                throw new DsqApiException("Invalid value for argument 'include'. If requesting posts, the following are valid: 'approved', 'unapproved', 'flagged', 'deleted' and 'spam'. If requesting threads, the following are valid: 'open', 'closed' and 'killed'", 2);
-
-            if (key == "interval" && !_validIntervals.Contains(value))
-                throw new DsqApiException("Invalid value for argument 'include'. Choices are '1h', '6h', '12h', '1d', '3d', '7d', '30d', '60d', '90d'");
-
-            //
-            // Return final value if there is one
             if (hasValue)
-                return String.Format("&{0}={1}", key, value);
+            {
+                if (key == "order" && !_validOrders.Any(value.Contains))
+                    throw new DsqApiException("Invalid value for argument 'order'. Must be 'asc' or 'desc', or if requesting popular posts, must be 'popular' or 'best'", 2);
 
-            else
-                return "";
+                if (key == "include" && !_validInclude.Any(value.Contains))
+                    throw new DsqApiException("Invalid value for argument 'include'. If requesting posts, the following are valid: 'approved', 'unapproved', 'flagged', 'deleted' and 'spam'. If requesting threads, the following are valid: 'open', 'closed' and 'killed'", 2);
+
+                if (key == "interval" && !_validIntervals.Any(value.Contains))
+                    throw new DsqApiException("Invalid value for argument 'include'. Choices are '1h', '6h', '12h', '1d', '3d', '7d', '30d', '60d', '90d'");
+
+                return String.Format("&{0}={1}", key, value);
+            }
+
+            return "";
         }
 
         private List<KeyValuePair<string, string>> PostAuthentication(bool authenticationRequired = false)
@@ -1507,7 +1453,7 @@ namespace Disqus.Api.V30
 
         private List<KeyValuePair<string, string>> PostArgument(List<KeyValuePair<string, string>> existingList, string key, string value, bool required = false)
         {
-            bool hasValue = String.IsNullOrWhiteSpace(value);
+            bool hasValue = !String.IsNullOrWhiteSpace(value);
 
             if (required && !hasValue)
                 throw new DsqApiException(String.Format("Argument '{0}' is required. Was: '{1}'", key, value), 2);
