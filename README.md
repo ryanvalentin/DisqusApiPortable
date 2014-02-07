@@ -18,8 +18,7 @@ Note: This is a work-in-progress
 
 ## Installation
 
-Use NuGet:
-`PM> Install-Package DisqusApiPortable`
+Clone and reference the project, if you dare. Will be on NuGet when complete.
 
 ## Basic terminology
 
@@ -36,6 +35,23 @@ This is a comment, and it belongs exclusively to a thread.
 
 ### User
 A user who has authenticated with Disqus or any of the social logins. API data will be tailored to the authenticated user's permissions on a given forum, thread or post. For example, attempting to post a comment on a thread the user has been blacklisted on will return a permission error, while for an un-blacklisted user it would be successful.
+
+## Example usage
+
+    // Build client
+    var authentication = new Disqus.Api.V30.Authentication.DsqAuth("YOUR_API_KEY");
+    Uri referrer = new Uri("http://example.com/", UriKind.Absolute);
+    var dsqClient = new Disqus.Api.V30.DisqusApiClient(authentication, referrer);
+    
+    // List comments in a thread
+    try
+    {
+        var response = await dsqClient.ListThreadPostsAsync("DISQUS_THREAD_ID", new List<string>(new string[] { "approved" }));
+    }
+    catch (DsqApiException ex)
+    {
+        System.Diagnostics.Debug.Write(ex.Message);
+    }
 
 ## License
 
