@@ -57,15 +57,26 @@ namespace DisqusApiPortable.Tests
                 // Make request that should fail
                 var response = client.ListPostsAsync(new List<string>(), new List<string>(new string[] { "cnn" })).Result;
             }
-            catch (DsqApiException ex)
-            {
-                Assert.AreEqual(ex.Code, 5, "The code in the response should be 5, indicating invalid API key. Was: " + ex.Message.ToString() + ": ");
-            }
             catch (AggregateException ex)
             {
-                foreach (Exception e in ex.InnerExceptions)
+                foreach (var e in ex.Flatten().InnerExceptions)
                 {
-                    System.Diagnostics.Debug.WriteLine(e.GetType().FullName + "; " + e.Message);
+                    if (e is DsqApiException)
+                    {
+                        DsqApiException dex = e as DsqApiException;
+
+                        Assert.AreEqual(dex.Code, 5, "The code in the response should be 5, indicating invalid API key. Was: " + dex.Message);
+                    }
+                    else if (e is JsonReaderException)
+                    {
+                        JsonReaderException jex = e as JsonReaderException;
+
+                        Assert.Fail(jex.Message + "; " + jex);
+                    }
+                    else
+                    {
+                        Assert.Fail(e.Message);
+                    }
                 }
             }
         }
@@ -475,34 +486,25 @@ namespace DisqusApiPortable.Tests
 
         }
 
-        private void AssertAndContinue(Action act)
+        [TestMethod]
+        public void Whitelists_All()
         {
-            try
-            {
-                act.Invoke();
-            }
-            catch (AggregateException ex)
-            {
-                foreach (var e in ex.Flatten().InnerExceptions)
-                {
-                    if (e is DsqApiException)
-                    {
-                        DsqApiException dex = e as DsqApiException;
+            DisqusApiClient client = new DisqusApiClient(new Disqus.Api.V30.Authentication.DsqAuth(_validApiKey, _validAccessToken), new Uri("http://disqus.com/", UriKind.Absolute));
 
-                        Assert.Fail("Code " + dex.Code + ": " + dex.Message);
-                    }
-                    else if (e is JsonReaderException)
-                    {
-                        JsonReaderException jex = e as JsonReaderException;
+            //
+            // Add to whitelist
+            var response = client.AddToWhitelistAsync(_ownedForum, "fake@example.com", _targetUserToAddModerator, "Test notes 1").Result;
+            Assert.AreEqual(0, response.Code);
 
-                        Assert.Fail(jex.Message + "; " + jex);
-                    }
-                    else
-                    {
-                        Assert.Fail(e.Message);
-                    }
-                }
-            }
+            //
+            // List the whitelist
+            var responseList = client.ListForumWhitelistAsync(_ownedForum, "", 1).Result;
+            Assert.AreEqual(0, responseList.Code);
+
+            //
+            // Remove from whitelist
+            var responseRemove = client.RemoveFromWhitelistAsync(_ownedForum, "fake@example.com", _targetUserToAddModerator).Result;
+            Assert.AreEqual(0, responseRemove.Code);
         }
 
         #endregion
