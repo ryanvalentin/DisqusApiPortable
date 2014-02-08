@@ -19,8 +19,8 @@ namespace Disqus.Api.V30
         public DisqusApiClient(DsqAuth auth, Uri referrer)
         {
             this.DisqusAuthentication = auth;
-            this._referrer = referrer;
-            this._host = referrer.Host;
+            this.referrer = referrer;
+            this.host = referrer.Host;
         }
 
         public DsqAuth DisqusAuthentication { get; set; }
@@ -1348,10 +1348,10 @@ namespace Disqus.Api.V30
 
         private HttpClient _httpClient { get; set; }
         private string _currentClientMethod { get; set; }
-        private Uri _referrer { get; set; }
-        private string _host { get; set; }
-        
-        private async Task<StreamReader> GetDataStreamAsync(string endpoint)
+        protected Uri referrer { get; set; }
+        protected string host { get; set; }
+
+        protected async Task<StreamReader> GetDataStreamAsync(string endpoint)
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
                 throw new DsqApiException("No internet connection was available");
@@ -1372,22 +1372,22 @@ namespace Disqus.Api.V30
             }
             else
             {
-                string raw = await response.Content.ReadAsStringAsync();
-
                 try
                 {
+                    string raw = await response.Content.ReadAsStringAsync();
+
                     JObject json = JObject.Parse(raw);
 
                     throw new DsqApiException((string)json["response"], (int)json["code"]);
                 }
                 catch (Exception ex)
                 {
-                    throw new DsqApiException("There was an error connecting to the Disqus servers: " + ex.Message + "; " + response.Content.ReadAsStringAsync());
+                    throw new DsqApiException(ex.Message + "; " + response.Content.ReadAsStringAsync());
                 }
             }
         }
 
-        private async Task<StreamReader> PostDataStreamAsync(string endpoint, List<KeyValuePair<string, string>> postArguments)
+        protected async Task<StreamReader> PostDataStreamAsync(string endpoint, List<KeyValuePair<string, string>> postArguments)
         {
             if (!NetworkInterface.GetIsNetworkAvailable())
                 throw new DsqApiException("No internet connection was available");
@@ -1408,17 +1408,17 @@ namespace Disqus.Api.V30
             }
             else
             {
-                string raw = await response.Content.ReadAsStringAsync();
-
                 try
                 {
+                    string raw = await response.Content.ReadAsStringAsync();
+
                     JObject json = JObject.Parse(raw);
 
                     throw new DsqApiException((string)json["response"], (int)json["code"]);
                 }
                 catch (Exception ex)
                 {
-                    throw new DsqApiException("There was an error connecting to the Disqus servers: " + ex.Message + "; " + response.Content.ReadAsStringAsync());
+                    throw new DsqApiException(ex.Message + "; " + response.Content.ReadAsStringAsync());
                 }
             }
         }
@@ -1434,8 +1434,8 @@ namespace Disqus.Api.V30
 
             //
             // Build headers
-            client.DefaultRequestHeaders.Referrer = this._referrer;
-            client.DefaultRequestHeaders.Host = this._host;
+            client.DefaultRequestHeaders.Referrer = this.referrer;
+            client.DefaultRequestHeaders.Host = this.host;
             client.DefaultRequestHeaders.Add("User-Agent", String.Format("Disqus SDK for .NET"));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
@@ -1452,7 +1452,7 @@ namespace Disqus.Api.V30
             return client;
         }
 
-        private T DeserializeStreamToObjectAsync<T>(StreamReader stream)
+        protected T DeserializeStreamToObjectAsync<T>(StreamReader stream)
         {
             using (JsonReader reader = new JsonTextReader(stream))
             {
@@ -1478,7 +1478,7 @@ namespace Disqus.Api.V30
             return (double)span.TotalSeconds;
         }
 
-        private string GetAuthentication(bool authenticationRequired = false)
+        protected string GetAuthentication(bool authenticationRequired = false)
         {
             if (authenticationRequired && String.IsNullOrEmpty(DisqusAuthentication.AccessToken))
                 throw new DsqApiException("You must be authenticated to perform this action", 4);
@@ -1499,7 +1499,7 @@ namespace Disqus.Api.V30
 
         private string[] _validInclude= { "approved", "unapproved", "flagged", "deleted", "spam", "open", "closed", "killed" };
 
-        private string GetArgument(string key, string value, bool required = false)
+        protected string GetArgument(string key, string value, bool required = false)
         {
             bool hasValue = !String.IsNullOrWhiteSpace(value);
 
@@ -1525,7 +1525,7 @@ namespace Disqus.Api.V30
             return "";
         }
 
-        private List<KeyValuePair<string, string>> PostAuthentication(bool authenticationRequired = false)
+        protected List<KeyValuePair<string, string>> PostAuthentication(bool authenticationRequired = false)
         {
             if (authenticationRequired && String.IsNullOrEmpty(DisqusAuthentication.AccessToken))
                 throw new DsqApiException("You must be authenticated to perform this action", 4);
@@ -1542,7 +1542,7 @@ namespace Disqus.Api.V30
             return arguments;
         }
 
-        private List<KeyValuePair<string, string>> PostArgument(List<KeyValuePair<string, string>> existingList, string key, string value, bool required = false)
+        protected List<KeyValuePair<string, string>> PostArgument(List<KeyValuePair<string, string>> existingList, string key, string value, bool required = false)
         {
             bool hasValue = !String.IsNullOrWhiteSpace(value);
 
@@ -1555,7 +1555,7 @@ namespace Disqus.Api.V30
             return existingList;
         }
 
-        private string ClampLimit(int limit, int min = 1, int max = 100)
+        protected string ClampLimit(int limit, int min = 1, int max = 100)
         {
             if (limit <= min)
                 return min.ToString();
