@@ -129,29 +129,125 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        private double _reputation;
         [JsonProperty(PropertyName = "reputation")]
-        public double Reputation { get; set; }
+        public double Reputation
+        {
+            get { return _reputation; }
+            set
+            {
+                if (value != _reputation)
+                {
+                    _reputation = value;
+                    this.NotifyPropertyChanged("Reputation");
+                }
+            }
+        }
 
+        private string _id;
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        public string Id
+        {
+            get { return _id; }
+            set
+            {
+                if (value != _id)
+                {
+                    _id = value;
+                    this.NotifyPropertyChanged("Id");
+                }
+            }
+        }
 
+        private string _location;
         [JsonProperty(PropertyName = "location")]
-        public string Location { get; set; }
+        public string Location
+        {
+            get { return _location; }
+            set
+            {
+                if (value != _location)
+                {
+                    _location = value;
+                    this.NotifyPropertyChanged("Location");
+                }
+            }
+        }
 
+        private bool _isPrivate;
         [JsonProperty(PropertyName = "isPrivate")]
-        public bool IsPrivate { get; set; }
+        public bool IsPrivate
+        {
+            get { return _isPrivate; }
+            set
+            {
+                if (value != _isPrivate)
+                {
+                    _isPrivate = value;
+                    this.NotifyPropertyChanged("IsPrivate");
+                }
+            }
+        }
 
+        private DateTime _joinedAt;
         [JsonProperty(PropertyName = "joinedAt")]
-        public DateTime JoinedAt { get; set; }
+        public DateTime JoinedAt
+        {
+            get { return _joinedAt; }
+            set
+            {
+                if (value != _joinedAt)
+                {
+                    _joinedAt = value;
+                    this.NotifyPropertyChanged("JoinedAt");
+                }
+            }
+        }
 
+        private string _email;
         [JsonProperty(PropertyName = "email")]
-        public string Email { get; set; }
+        public string Email
+        {
+            get { return _email; }
+            set
+            {
+                if (value != _email)
+                {
+                    _email = value;
+                    this.NotifyPropertyChanged("Email");
+                }
+            }
+        }
 
+        private bool _isVerified;
         [JsonProperty(PropertyName = "isVerified")]
-        public bool IsVerified { get; set; }
+        public bool IsVerified
+        {
+            get { return _isVerified; }
+            set
+            {
+                if (value != _isVerified)
+                {
+                    _isVerified = value;
+                    this.NotifyPropertyChanged("IsVerified");
+                }
+            }
+        }
 
+        private DsqAvatar _avatar;
         [JsonProperty(PropertyName = "avatar")]
-        public DsqAvatar Avatar { get; set; }
+        public DsqAvatar Avatar
+        {
+            get { return _avatar; }
+            set
+            {
+                if (value != _avatar)
+                {
+                    _avatar = value;
+                    this.NotifyPropertyChanged("Avatar");
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propertyName)
