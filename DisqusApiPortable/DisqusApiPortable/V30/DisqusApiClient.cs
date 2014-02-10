@@ -44,7 +44,7 @@ namespace Disqus.Api.V30
         /// <summary>
         /// Adds a moderator to a forum
         /// </summary>
-        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <param name="forum">Looks up a forum by ID (aka short name). Authenticated user must be a moderator on the selected forum, and have "admin" permission scope.</param>
         /// <returns>Object containing the ID of the moderator that was added. NOTE this is NOT the user ID</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
@@ -967,7 +967,7 @@ namespace Disqus.Api.V30
         /// <param name="title">Maximum length of 200</param>
         /// <param name="message">Content of the article or post</param>
         /// <param name="identifier">Custom disqus_identifier. Maximum length of 300</param>
-        /// <param name="author_id">You must be a moderator on the applicable forum to change a thread author. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="author_id">You must be a moderator on the applicable forum to change a thread author. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <param name="url">URL (defined by RFC 3986). Maximum length of 500</param>
         /// <returns>An object containing the newly updated thread</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
@@ -1044,7 +1044,7 @@ namespace Disqus.Api.V30
         /// <summary>
         /// Returns details of a user. If user argument is blank, will get details about the authenticated user
         /// </summary>
-        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query</param>
         /// <returns>Object containing extended details of a user</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqObjectResponse<DsqUserDetails>> GetUserDetailsAsync(string user = "")
@@ -1059,7 +1059,7 @@ namespace Disqus.Api.V30
         /// <summary>
         /// Follows a target user
         /// </summary>
-        /// <param name="target">The target user to follow. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="target">The target user to follow. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <returns></returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqObjectResponse<DsqUser>> FollowUserAsync(string target)
@@ -1073,7 +1073,7 @@ namespace Disqus.Api.V30
         /// <summary>
         /// Unfollows a target user
         /// </summary>
-        /// <param name="target">The target user to unfollow. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="target">The target user to unfollow. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <returns></returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqObjectResponse<DsqUser>> UnfollowUserAsync(string target)
@@ -1090,7 +1090,7 @@ namespace Disqus.Api.V30
         /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
         /// <param name="limit">Maximum value of 100</param>
         /// <param name="order">Choices: asc, desc</param>
-        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <returns>A list of forums the user has been active on, sorted by when the forum was created</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqListCursorResponse<DsqForum>> ListUsersActiveForumsAsync(string cursor = "", int limit = 25, string order = "asc", string user = "")
@@ -1109,7 +1109,7 @@ namespace Disqus.Api.V30
         /// Returns a list of forums a user has been active on recenty, sorted by the user's activity.
         /// </summary>
         /// <param name="limit">Maximum value of 100</param>
-        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <returns>Non-paginated list of user's most active forums</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqListResponse<DsqForum>> ListUsersMostActiveForumsAsync(int limit = 25, string user = "")
@@ -1129,7 +1129,7 @@ namespace Disqus.Api.V30
         /// <param name="include">Choices: open, closed, killed</param>
         /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
         /// <param name="limit">Maximum value of 100</param>
-        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <param name="order">Choices: asc, desc</param>
         /// <returns>List of threads the user has either commented on or favorited</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
@@ -1163,7 +1163,7 @@ namespace Disqus.Api.V30
         /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
         /// <param name="limit">Maximum value of 100</param>
         /// <param name="order">Choices: asc, desc</param>
-        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <returns>Returns a list of users a user is being followed by.</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqListCursorResponse<DsqUser>> ListUsersFollowersAsync(string cursor = "", int limit = 25, string order = "asc", string user = "")
@@ -1184,7 +1184,7 @@ namespace Disqus.Api.V30
         /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
         /// <param name="limit">Maximum value of 100</param>
         /// <param name="order">Choices: asc, desc</param>
-        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <returns>Returns a list of users a user is following.</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqListCursorResponse<DsqUser>> ListUsersFollowingAsync(string cursor = "", int limit = 25, string order = "asc", string user = "")
@@ -1205,7 +1205,7 @@ namespace Disqus.Api.V30
         /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
         /// <param name="limit">Maximum value of 100</param>
         /// <param name="order">Choices: asc, desc</param>
-        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <returns>Returns a list of forums a user owns.</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
         public async Task<DsqListCursorResponse<DsqForum>> ListUsersForumsAsync(string cursor = "", int limit = 25, string order = "asc", string user = "")
@@ -1218,6 +1218,62 @@ namespace Disqus.Api.V30
                 + GetArgument("user", user);
 
             return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqForum>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a list of posts made by the user.
+        /// </summary>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
+        /// <param name="limit">Maximum value of 100</param>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="order">Choices: asc, desc</param>
+        /// <returns>Returns a list of posts made by the user.</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        public async Task<DsqListCursorResponse<DsqPostExpanded>> ListUsersPostsAsync(string user, int limit = 25, string cursor = "", string order = "desc")
+        {
+            string endpoint = Constants.Endpoints.Users.ListPosts
+                + GetAuthentication()
+                + GetArgument("cursor", cursor)
+                + GetArgument("order", order)
+                + GetArgument("limit", ClampLimit(limit))
+                + GetArgument("user", user)
+                + GetArgument("related", "forum")
+                + GetArgument("related", "thread");
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqPostExpanded>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a list of posts made by the user.
+        /// </summary>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
+        /// <param name="include">Choices: unapproved, approved, spam, deleted, flagged</param>
+        /// <param name="limit">Maximum value of 100</param>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="order">Choices: asc, desc</param>
+        /// <param name="since">The date/time to start returning results. Relative to 'order' argument</param>
+        /// <returns>Returns a list of posts made by the user.</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        public async Task<DsqListCursorResponse<DsqPostExpanded>> ListUsersPostsAsync(string user, List<string> include, int limit = 25, string cursor = "", string order = "desc", DateTime? since = null)
+        {
+            string endpoint = Constants.Endpoints.Users.ListPosts
+                + GetAuthentication()
+                + GetArgument("cursor", cursor)
+                + GetArgument("order", order)
+                + GetArgument("limit", ClampLimit(limit))
+                + GetArgument("user", user)
+                + GetArgument("related", "forum")
+                + GetArgument("related", "thread");
+
+            foreach (var i in include)
+            {
+                endpoint += GetArgument("include", i);
+            }
+
+            if (since.HasValue)
+                endpoint += ConvertToTimestamp(since.Value);
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqPostExpanded>>(await GetDataStreamAsync(endpoint));
         }
 
         /// <summary>
@@ -1264,7 +1320,7 @@ namespace Disqus.Api.V30
         /// </summary>
         /// <param name="forum">Looks up a forum by ID (aka short name)</param>
         /// <param name="email">Email address (defined by RFC 5322)</param>
-        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <param name="notes">Maximum length of 50</param>
         /// <returns>List containing the objects added to the whitelist</returns>
         public async Task<DsqListResponse<DsqFilter>> AddToWhitelistAsync(string forum, string email, string user, string notes = "")
@@ -1277,7 +1333,7 @@ namespace Disqus.Api.V30
         /// </summary>
         /// <param name="forum">Looks up a forum by ID (aka short name)</param>
         /// <param name="email">Email address (defined by RFC 5322)</param>
-        /// <param name="user">Looks up a user by ID. You may look up a user by username using the 'username' query type.</param>
+        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
         /// <returns>A list of objects removed from the whitelist</returns>
         public async Task<DsqListResponse<DsqFilter>> RemoveFromWhitelistAsync(string forum, string email = "", string user = "")
         {

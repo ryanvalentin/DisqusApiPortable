@@ -39,10 +39,10 @@ namespace Disqus.Api.V30.Models
 
         bool IsEdited { get; }
 
-        string ipAddress { get; }
+        string IpAddress { get; }
 
-        string DisqusThreadId { get; }
+        string ThreadId { get; }
 
-        string DisqusForumId { get; }
+        string ForumId { get; }
     }
 }

@@ -205,15 +205,15 @@ namespace Disqus.Api.V30.Models
         #region Ignored properties that vary between an object and a string
 
         [JsonIgnore]
-        public string DisqusThreadId { get; set; }
+        public string ThreadId { get; set; }
 
         [JsonIgnore]
-        public string DisqusForumId { get; set; }
+        public string ForumId { get; set; }
 
         #endregion
 
         [JsonProperty(PropertyName = "ipAddress")]
-        public string ipAddress { get; set; }
+        public string IpAddress { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propertyName)

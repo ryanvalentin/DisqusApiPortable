@@ -22,7 +22,7 @@ namespace Disqus.Api.V30.Models
 
                     //
                     // Mirror to base class for interface consistency
-                    this.DisqusForumId = _forum;
+                    this.ForumId = _forum;
                 }
             }
         }
@@ -44,7 +44,7 @@ namespace Disqus.Api.V30.Models
 
                     //
                     // Mirror to base class for interface consistency
-                    this.DisqusThreadId = _thread;
+                    this.ThreadId = _thread;
                 }
             }
         }

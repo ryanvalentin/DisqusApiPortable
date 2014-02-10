@@ -21,7 +21,7 @@ namespace Disqus.Api.V30.Models
 
                     //
                     // Populate forum ID of base class for interface consistency
-                    this.DisqusForumId = _forum.Id;
+                    this.ForumId = _forum.Id;
                 }
             }
         }
@@ -40,7 +40,7 @@ namespace Disqus.Api.V30.Models
 
                     //
                     // Populate thread ID of base class for interface consistency
-                    this.DisqusThreadId = _thread.Id;
+                    this.ThreadId = _thread.Id;
                 }
             }
         }
