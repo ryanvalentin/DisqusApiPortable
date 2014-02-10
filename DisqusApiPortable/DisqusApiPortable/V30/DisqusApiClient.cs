@@ -961,6 +961,29 @@ namespace Disqus.Api.V30
         }
 
         /// <summary>
+        /// Returns an unsorted set of threads given a list of ids.
+        /// </summary>
+        /// <param name="threads">Looks up a thread by ID</param>
+        /// <param name="forum">Forum to get threads from</param>
+        /// <returns>List of threads found in the order</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        public async Task<DsqListResponse<DsqThreadExpanded>> GetThreadSetAsync(List<string> threads, string forum)
+        {
+            string endpoint = Constants.Endpoints.Threads.Set
+                + GetAuthentication()
+                + GetArgument("forum", forum)
+                + GetArgument("related", "forum")
+                + GetArgument("related", "author");
+
+            foreach (string t in threads)
+            {
+                endpoint += GetArgument("thread", t);
+            }
+
+            return DeserializeStreamToObjectAsync<DsqListResponse<DsqThreadExpanded>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
         /// Updates information on a thread. You must be the author of the thread or a moderator on the applicable forum.
         /// </summary>
         /// <param name="thread_id">Looks up by Disqus thread ID</param>
