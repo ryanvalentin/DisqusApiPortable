@@ -14,7 +14,7 @@ namespace Disqus.Api.V30.Models
 
         bool IsAnonymous { get; }
 
-        bool IsFollowing { get; }
+        bool IsFollowing { get; set; }
 
         bool IsFollowedBy { get; }
 
@@ -26,7 +26,7 @@ namespace Disqus.Api.V30.Models
 
         string Location { get; }
 
-        bool IsPrivate { get; }
+        bool IsPrivate { get; set; }
 
         DateTime JoinedAt { get; }
 

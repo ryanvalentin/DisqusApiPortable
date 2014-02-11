@@ -5,6 +5,12 @@ namespace Disqus.Api.V30.Models
 {
     public class DsqForum : INotifyPropertyChanged
     {
+        public DsqForum()
+        {
+            this.Settings = new DsqSettings();
+            this.Favicon = new DsqFavicon();
+        }
+
         private string _name;
         [JsonProperty(PropertyName = "name")]
         public string Name
