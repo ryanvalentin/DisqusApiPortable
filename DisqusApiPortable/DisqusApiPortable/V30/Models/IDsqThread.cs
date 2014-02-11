@@ -39,8 +39,8 @@ namespace Disqus.Api.V30.Models
 
         bool IsDeleted { get; }
 
-        string DisqusForumId { get; }
+        string ForumId { get; }
 
-        string DisqusAuthorId { get; }
+        string AuthorId { get; }
     }
 }

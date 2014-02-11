@@ -18,7 +18,7 @@ namespace Disqus.Api.V30.Models
 
                     //
                     // Set forum ID manually for interface consistency
-                    this.DisqusAuthorId = _author.Id;
+                    this.AuthorId = _author.Id;
                 }
             }
         }
@@ -37,7 +37,7 @@ namespace Disqus.Api.V30.Models
 
                     //
                     // Set forum ID manually for interface consistency
-                    this.DisqusForumId = _forum.Id;
+                    this.ForumId = _forum.Id;
                 }
             }
         }

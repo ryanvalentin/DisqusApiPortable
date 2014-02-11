@@ -253,13 +253,13 @@ namespace Disqus.Api.V30.Models
             }
         }
 
-        #region Ignored properties that are set manually for interface consistency
+        #region Json-ignored properties for interface consistency
 
         [JsonIgnore]
-        public string DisqusForumId { get; set; }
+        public string ForumId { get; set; }
 
         [JsonIgnore]
-        public string DisqusAuthorId { get; set; }
+        public string AuthorId { get; set; }
 
         #endregion
 

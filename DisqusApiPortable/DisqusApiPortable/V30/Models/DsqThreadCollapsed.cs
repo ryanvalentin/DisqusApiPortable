@@ -21,7 +21,7 @@ namespace Disqus.Api.V30.Models
 
                     //
                     // Mirror to base class for interface consistency
-                    this.DisqusAuthorId = _author;
+                    this.AuthorId = _author;
                 }
             }
         }
@@ -40,7 +40,7 @@ namespace Disqus.Api.V30.Models
 
                     //
                     // Mirror to base class for interface consistency
-                    this.DisqusForumId = _forum;
+                    this.ForumId = _forum;
                 }
             }
         }
