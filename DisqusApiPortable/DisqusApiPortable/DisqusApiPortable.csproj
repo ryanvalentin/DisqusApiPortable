@@ -80,6 +80,7 @@
     <Compile Include="V30\Models\DsqThreadCollapsed.cs" />
     <Compile Include="V30\Models\DsqThreadExpanded.cs" />
     <Compile Include="V30\Models\DsqThreadTopPost.cs" />
+    <Compile Include="V30\Models\DsqTopic.cs" />
     <Compile Include="V30\Models\DsqUser.cs" />
     <Compile Include="V30\Models\DsqUserDetails.cs" />
     <Compile Include="V30\Models\DsqUserForumActive.cs" />

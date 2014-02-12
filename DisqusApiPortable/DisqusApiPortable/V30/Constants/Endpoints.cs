@@ -34,6 +34,10 @@
             public const string ListThreads = _apiBase + _apiVersion + _category + "listThreads" + _resourceType;
             public const string ListUsers = _apiBase + _apiVersion + _category + "listUsers" + _resourceType;
             public const string RemoveModerator = _apiBase + _apiVersion + _category + "removeModerator" + _resourceType;
+            public const string Follow = _apiBase + _apiVersion + _category + "follow" + _resourceType;
+            public const string Unfollow = _apiBase + _apiVersion + _category + "unfollow" + _resourceType;
+            public const string ListTopics = _apiBase + _apiVersion + _category + "listTopics" + _resourceType;
+            public const string ListFollowers = _apiBase + _apiVersion + _category + "listFollowers" + _resourceType;
         }
 
         public static class Posts
@@ -51,6 +55,16 @@
             public const string Spam = _apiBase + _apiVersion + _category + "spam" + _resourceType;
             public const string Update = _apiBase + _apiVersion + _category + "update" + _resourceType;
             public const string Vote = _apiBase + _apiVersion + _category + "vote" + _resourceType;
+        }
+
+        public static class Topics
+        {
+            private const string _category = "topics/";
+            public const string Follow = _apiBase + _apiVersion + _category + "follow" + _resourceType;
+            public const string List = _apiBase + _apiVersion + _category + "list" + _resourceType;
+            public const string ListFollowers = _apiBase + _apiVersion + _category + "listFollowers" + _resourceType;
+            public const string ListForums = _apiBase + _apiVersion + _category + "listForums" + _resourceType;
+            public const string Unfollow = _apiBase + _apiVersion + _category + "unfollow" + _resourceType;
         }
 
         public static class Threads
@@ -89,6 +103,9 @@
             public const string ListPosts = _apiBase + _apiVersion + _category + "listPosts" + _resourceType;
             public const string Unfollow = _apiBase + _apiVersion + _category + "unfollow" + _resourceType;
             public const string UpdateProfile = _apiBase + _apiVersion + _category + "updateProfile" + _resourceType;
+            public const string ListFollowingForums = _apiBase + _apiVersion + _category + "listFollowingForums" + _resourceType;
+            public const string ListFollowingTopics = _apiBase + _apiVersion + _category + "listFollowingTopics" + _resourceType;
+
         }
 
         public static class Whitelists
