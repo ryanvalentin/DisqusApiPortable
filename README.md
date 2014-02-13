@@ -11,7 +11,7 @@ Note: This is a work-in-progress
 
 ## Supported frameworks
 
-- .NET Framework 4.0.3+
+- .NET Framework 4.5+
 - Silverlight 5
 - Windows Phone 8
 - Windows Store (8.0+)

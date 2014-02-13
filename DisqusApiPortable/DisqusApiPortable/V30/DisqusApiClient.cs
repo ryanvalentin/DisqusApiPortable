@@ -700,9 +700,12 @@ namespace Disqus.Api.V30
         /// <param name="post_id">Looks up a post by ID</param>
         /// <returns>Object containing the new vote delta and the updated post</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task<DsqObjectResponse<DsqVoteObject>> UpvotePostAsync(string post_id)
+        public async Task<DsqObjectResponse<DsqVoteObject>> UpvotePostAsync(string post_id, bool undoUpvote = false)
         {
-            return await VotePostAsync(post_id, "1");
+            if (undoUpvote)
+                return await VotePostAsync(post_id, "0");
+            else
+                return await VotePostAsync(post_id, "1");
         }
 
         /// <summary>
@@ -711,9 +714,12 @@ namespace Disqus.Api.V30
         /// <param name="post_id">Looks up a post by ID</param>
         /// <returns>Object containing the new vote delta and the updated post</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task<DsqObjectResponse<DsqVoteObject>> DownvotePostAsync(string post_id)
+        public async Task<DsqObjectResponse<DsqVoteObject>> DownvotePostAsync(string post_id, bool undoDownvote = false)
         {
-            return await VotePostAsync(post_id, "-1");
+            if (undoDownvote)
+                return await VotePostAsync(post_id, "0");
+            else
+                return await VotePostAsync(post_id, "-1");
         }
 
         /// <summary>
