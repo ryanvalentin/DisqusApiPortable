@@ -20,6 +20,14 @@
             public const string Remove = _apiBase + _apiVersion + _category + "remove" + _resourceType;
         }
 
+        public static class Feeds
+        {
+            private const string _category = "feeds/";
+            public const string ListForumFeed = _apiBase + _apiVersion + _category + "listForumFeed" + _resourceType;
+            public const string ListTopicFeed = _apiBase + _apiVersion + _category + "listTopicFeed" + _resourceType;
+            public const string ListUserHomeFeed = _apiBase + _apiVersion + _category + "listUserHomeFeed" + _resourceType;
+        }
+
         public static class Forums
         {
             private const string _category = "forums/";

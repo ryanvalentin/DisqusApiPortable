@@ -39,6 +39,67 @@ namespace Disqus.Api.V30
 
         #endregion
 
+        #region Feeds endpoints
+
+        /// <summary>
+        /// Returns a feed of active threads in a forum
+        /// </summary>
+        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="limit">Defaults to 25. Maximum value of 100</param>
+        /// <returns>Returns a feed of active threads in a forum</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        public async Task<DsqListCursorResponse<DsqThreadCollapsed>> ListForumFeedAsync(string forum, string cursor = "", int limit = 25)
+        {
+            string endpoint = Constants.Endpoints.Feeds.ListForumFeed
+                + GetAuthentication()
+                + GetArgument("forum", forum, true)
+                + GetArgument("cursor", cursor)
+                + GetArgument("limit", ClampLimit(limit));
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqThreadCollapsed>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a feed of active threads in a topic
+        /// </summary>
+        /// <param name="topic">Looks up a topic by ID (slug)</param>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="limit">Defaults to 25. Maximum value of 100</param>
+        /// <returns>Returns a feed of active threads in a topic</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        /// 
+        public async Task<DsqListCursorResponse<DsqThreadCollapsed>> ListTopicFeedAsync(string topic, string cursor = "", int limit = 25)
+        {
+            string endpoint = Constants.Endpoints.Feeds.ListTopicFeed
+                + GetAuthentication()
+                + GetArgument("topic", topic, true)
+                + GetArgument("cursor", cursor)
+                + GetArgument("limit", ClampLimit(limit));
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqThreadCollapsed>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
+        /// Returns a user's feed of threads in forums/topics they follow
+        /// </summary>
+        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
+        /// <param name="limit">Defaults to 25. Maximum value of 100</param>
+        /// <returns>Returns a user's feed of threads in forums/topics they follow</returns>
+        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        /// <seealso cref="http://disqus.com/api/docs/feeds/listUserHomeFeed/"/>
+        public async Task<DsqListCursorResponse<DsqThreadCollapsed>> ListUserHomeFeedAsync(string cursor = "", int limit = 25)
+        {
+            string endpoint = Constants.Endpoints.Feeds.ListUserHomeFeed
+                + GetAuthentication(true)
+                + GetArgument("cursor", cursor)
+                + GetArgument("limit", ClampLimit(limit));
+
+            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqThreadCollapsed>>(await GetDataStreamAsync(endpoint));
+        }
+
+        #endregion
+
         #region Forums endpoints
 
         /// <summary>
