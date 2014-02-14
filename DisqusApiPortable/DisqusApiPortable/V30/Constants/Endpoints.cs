@@ -103,8 +103,6 @@
             public const string ListPosts = _apiBase + _apiVersion + _category + "listPosts" + _resourceType;
             public const string Unfollow = _apiBase + _apiVersion + _category + "unfollow" + _resourceType;
             public const string UpdateProfile = _apiBase + _apiVersion + _category + "updateProfile" + _resourceType;
-            public const string ListFollowingForums = _apiBase + _apiVersion + _category + "listFollowingForums" + _resourceType;
-            public const string ListFollowingTopics = _apiBase + _apiVersion + _category + "listFollowingTopics" + _resourceType;
 
         }
 

@@ -197,84 +197,6 @@ namespace Disqus.Api.V30
             return DeserializeStreamToObjectAsync<DsqObjectResponse<Dictionary<string, long?>>>(await PostDataStreamAsync(Constants.Endpoints.Forums.RemoveModerator, arguments));
         }
 
-        /// <summary>
-        /// Follow a forum.
-        /// </summary>
-        /// <param name="target">Looks up a forum by ID (aka short name)</param>
-        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task FollowForumAsync(string target)
-        {
-            List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
-            arguments = PostArgument(arguments, "target", target, true);
-
-            var response = await PostDataStreamAsync(Constants.Endpoints.Forums.Follow, arguments);
-            
-            //
-            // Nothing in result, so just dispose if successful
-            response.Dispose();
-        }
-
-        /// <summary>
-        /// Unfollow a forum.
-        /// </summary>
-        /// <param name="target">Looks up a forum by ID (aka short name)</param>
-        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task UnfollowForumAsync(string target)
-        {
-            List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
-            arguments = PostArgument(arguments, "target", target, true);
-
-            var response = await PostDataStreamAsync(Constants.Endpoints.Forums.Unfollow, arguments);
-
-            //
-            // Nothing in result, so just dispose if successful
-            response.Dispose();
-        }
-
-        /// <summary>
-        /// Returns a list of users following a forum.
-        /// </summary>
-        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
-        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
-        /// <param name="limit">Defaults to 25. Maximum value of 100</param>
-        /// <param name="order">Defaults to "asc" Choices: desc</param>
-        /// <param name="since_id">The ID number of the user to start returning results from, relative to sort order</param>
-        /// <returns>Returns a list of users following a forum.</returns>
-        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task<DsqListCursorResponse<DsqUser>> ListForumFollowersAsync(string forum, string cursor = "", int limit = 25, string order = "asc", string since_id = "")
-        {
-            string endpoint = Constants.Endpoints.Forums.ListFollowers
-                + GetAuthentication()
-                + GetArgument("forum", forum, true)
-                + GetArgument("cursor", cursor)
-                + GetArgument("limit", ClampLimit(limit))
-                + GetArgument("order", order)
-                + GetArgument("since_id", since_id);
-
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
-        }
-
-        /// <summary>
-        /// Returns a list of topics for a forum.
-        /// </summary>
-        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
-        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
-        /// <param name="limit">Defaults to 25. Maximum value of 100</param>
-        /// <param name="order">Defaults to "asc" Choices: desc</param>
-        /// <returns>Returns a list of topics for a forum.</returns>
-        /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task<DsqListCursorResponse<DsqTopic>> ListForumTopicsAsync(string forum, string cursor = "", int limit = 25, string order = "asc")
-        {
-            string endpoint = Constants.Endpoints.Forums.ListTopics
-                + GetAuthentication()
-                + GetArgument("forum", forum, true)
-                + GetArgument("cursor", cursor)
-                + GetArgument("limit", ClampLimit(limit))
-                + GetArgument("order", order);
-
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqTopic>>(await GetDataStreamAsync(endpoint));
-        }
-
         #endregion
 
         #region Posts endpoints
@@ -1505,41 +1427,6 @@ namespace Disqus.Api.V30
             arguments = PostArgument(arguments, "url", url.OriginalString);
 
             return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUser>>(await PostDataStreamAsync(Constants.Endpoints.Users.ListForums, arguments));
-        }
-
-        /// <summary>
-        /// Returns a list of forums a user is following.
-        /// </summary>
-        /// <param name="user">Looks up a user by ID. You may look up a user by username by prefixing with 'username:' query.</param>
-        /// <param name="limit">Maximum value of 100</param>
-        /// <param name="cursor">The next/previous cursor ID (for pagination)</param>
-        /// <param name="order">Choices: asc, desc</param>
-        /// <param name="since_id">The ID number of the user to start returning results from, relative to sort order</param>
-        /// <returns>Returns a list of forums a user is following.</returns>
-        public async Task<DsqListCursorResponse<DsqForum>> ListUserFollowingForumsAsync(string user, string cursor = "", int limit = 25, string order = "asc", string since_id = "")
-        {
-            string endpoint = Constants.Endpoints.Users.ListFollowingForums
-                + GetAuthentication()
-                + GetArgument("cursor", cursor)
-                + GetArgument("order", order)
-                + GetArgument("limit", ClampLimit(limit))
-                + GetArgument("user", user)
-                + GetArgument("since_id", since_id);
-
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqForum>>(await GetDataStreamAsync(endpoint));
-        }
-
-        public async Task<DsqListCursorResponse<DsqTopic>> ListUserFollowingTopicsAsync(string user, string cursor = "", int limit = 25, string order = "asc", string since_id = "")
-        {
-            string endpoint = Constants.Endpoints.Users.ListFollowingTopics
-                + GetAuthentication()
-                + GetArgument("cursor", cursor)
-                + GetArgument("order", order)
-                + GetArgument("limit", ClampLimit(limit))
-                + GetArgument("user", user)
-                + GetArgument("since_id", since_id);
-
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqTopic>>(await GetDataStreamAsync(endpoint));
         }
 
         #endregion
