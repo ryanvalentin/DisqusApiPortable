@@ -85,6 +85,21 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        private bool _isHighlighted;
+        [JsonProperty(PropertyName = "isHighlighted")]
+        public bool IsHighlighted
+        {
+            get { return _isHighlighted; }
+            set
+            {
+                if (value != _isHighlighted)
+                {
+                    _isHighlighted = value;
+                    this.NotifyPropertyChanged("IsHighlighted");
+                }
+            }
+        }
+
         [JsonProperty(PropertyName = "author")]
         public DsqUser Author { get; set; }
 

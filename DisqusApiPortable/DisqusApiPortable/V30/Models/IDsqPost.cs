@@ -31,6 +31,8 @@ namespace Disqus.Api.V30.Models
 
         bool IsFlagged { get; }
 
+        bool IsHighlighted { get; }
+
         string RawMessage { get; }
 
         DsqApproxLoc ApproxLoc { get; }
