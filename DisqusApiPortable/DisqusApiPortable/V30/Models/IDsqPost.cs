@@ -5,11 +5,11 @@ namespace Disqus.Api.V30.Models
 {
     public interface IDsqPost
     {
-        int Dislikes { get; }
+        int Dislikes { get; set; }
 
-        int? NumReports { get; }
+        int? NumReports { get; set; }
 
-        int Likes { get; }
+        int Likes { get; set; }
 
         string Message { get; }
 
@@ -21,7 +21,7 @@ namespace Disqus.Api.V30.Models
 
         List<DsqMedia> Media { get; }
 
-        int UserScore { get; }
+        int UserScore { get; set; }
 
         bool IsSpam { get; }
 
@@ -37,9 +37,9 @@ namespace Disqus.Api.V30.Models
 
         DsqApproxLoc ApproxLoc { get; }
 
-        int Points { get; }
+        int Points { get; set; }
 
-        bool IsEdited { get; }
+        bool IsEdited { get; set; }
 
         string IpAddress { get; }
 

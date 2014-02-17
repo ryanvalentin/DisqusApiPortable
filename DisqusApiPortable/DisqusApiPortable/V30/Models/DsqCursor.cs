@@ -12,13 +12,13 @@ namespace Disqus.Api.V30.Models
         public string Prev { get; set; }
 
         [JsonProperty(PropertyName = "hasNext")]
-        public bool HasNext { get; set; }
+        public bool? HasNext { get; set; }
 
         [JsonProperty(PropertyName = "next")]
         public string Next { get; set; }
 
         [JsonProperty(PropertyName = "hasPrev")]
-        public bool HasPrev { get; set; }
+        public bool? HasPrev { get; set; }
 
         [JsonProperty(PropertyName = "total")]
         public int? Total { get; set; }
@@ -27,6 +27,6 @@ namespace Disqus.Api.V30.Models
         public string Id { get; set; }
 
         [JsonProperty(PropertyName = "more")]
-        public bool More { get; set; }
+        public bool? More { get; set; }
     }
 }
