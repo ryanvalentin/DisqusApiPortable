@@ -712,6 +712,25 @@ namespace Disqus.Api.V30
         #region Threads endpoints
 
         /// <summary>
+        /// Gets the highlighted (featured) comment from a particular thread
+        /// </summary>
+        /// <param name="thread">Looks up a thread by ID. You may pass us the 'ident' or 'link' query types instead of an ID by including 'forum'.</param>
+        /// <param name="forum">Looks up a forum by ID (aka short name)</param>
+        /// <returns>The featured comment (if any) in a list</returns>
+        public async Task<DsqListResponse<DsqPostExpanded>> GetHighlightedPostAsync(string thread, string forum)
+        {
+            string endpoint = Constants.Endpoints.Threads.ListPosts
+                + GetAuthentication()
+                + GetArgument("related", "forum")
+                + GetArgument("related", "thread")
+                + GetArgument("limit", "1")
+                + GetArgument("thread", thread, true)
+                + GetArgument("forum", forum, true);
+
+            return DeserializeStreamToObjectAsync<DsqListResponse<DsqPostExpanded>>(await GetDataStreamAsync(endpoint));
+        }
+
+        /// <summary>
         /// Closes selected threads
         /// </summary>
         /// <param name="thread_ids">Looks up a thread by ID. You must be a moderator on the selected thread's forum.</param>
