@@ -81,6 +81,7 @@ namespace Disqus.Api.V30.Models
                 {
                     _isDeleted = value;
                     this.NotifyPropertyChanged("IsDeleted");
+                    this.NotifyPropertyChanged("CurrentState");
                 }
             }
         }
@@ -96,6 +97,7 @@ namespace Disqus.Api.V30.Models
                 {
                     _isHighlighted = value;
                     this.NotifyPropertyChanged("IsHighlighted");
+                    this.NotifyPropertyChanged("CurrentState");
                 }
             }
         }
@@ -103,8 +105,20 @@ namespace Disqus.Api.V30.Models
         [JsonProperty(PropertyName = "author")]
         public DsqUser Author { get; set; }
 
+        private List<DsqMedia> _media;
         [JsonProperty(PropertyName = "media")]
-        public List<DsqMedia> Media { get; set; }
+        public List<DsqMedia> Media
+        {
+            get { return _media; }
+            set
+            {
+                if (value != _media)
+                {
+                    _media = value;
+                    this.NotifyPropertyChanged("Media");
+                }
+            }
+        }
 
         private int _userScore;
         [JsonProperty(PropertyName = "userScore")]
@@ -132,6 +146,7 @@ namespace Disqus.Api.V30.Models
                 {
                     _isSpam = value;
                     this.NotifyPropertyChanged("IsSpam");
+                    this.NotifyPropertyChanged("CurrentState");
                 }
             }
         }
@@ -150,6 +165,7 @@ namespace Disqus.Api.V30.Models
                 {
                     _isApproved = value;
                     this.NotifyPropertyChanged("IsApproved");
+                    this.NotifyPropertyChanged("CurrentState");
                 }
             }
         }
@@ -218,6 +234,28 @@ namespace Disqus.Api.V30.Models
         }
 
         #region Ignored properties that vary between an object and a string
+
+        [JsonIgnore]
+        public string CurrentState
+        {
+            get
+            {
+                if (this.IsApproved && !this.IsDeleted)
+                    return "approved";
+
+                else if (this.IsDeleted)
+                    return "deleted";
+
+                else if (!this.IsDeleted && !this.IsSpam && !this.IsApproved)
+                    return "unapproved";
+
+                else if (this.IsSpam && !this.IsApproved)
+                    return "spam";
+
+                else
+                    return "";
+            }
+        }
 
         [JsonIgnore]
         public string ThreadId { get; set; }

@@ -11,11 +11,11 @@ namespace Disqus.Api.V30.Models
 
         int Likes { get; set; }
 
-        string Message { get; }
+        string Message { get; set; }
 
         string Id { get; }
 
-        bool IsDeleted { get; }
+        bool IsDeleted { get; set; }
 
         DsqUser Author { get; }
 
@@ -23,17 +23,17 @@ namespace Disqus.Api.V30.Models
 
         int UserScore { get; set; }
 
-        bool IsSpam { get; }
+        bool IsSpam { get; set; }
 
         DateTime CreatedAt { get; }
 
-        bool IsApproved { get; }
+        bool IsApproved { get; set; }
 
-        bool IsFlagged { get; }
+        bool IsFlagged { get; set; }
 
-        bool IsHighlighted { get; }
+        bool IsHighlighted { get; set; }
 
-        string RawMessage { get; }
+        string RawMessage { get; set; }
 
         DsqApproxLoc ApproxLoc { get; }
 
@@ -46,5 +46,7 @@ namespace Disqus.Api.V30.Models
         string ThreadId { get; }
 
         string ForumId { get; }
+
+        string CurrentState { get; }
     }
 }

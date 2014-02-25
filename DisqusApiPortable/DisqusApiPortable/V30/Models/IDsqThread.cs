@@ -14,6 +14,8 @@ namespace Disqus.Api.V30.Models
         int UserScore { get; }
 
         bool CanPost { get; }
+
+        bool CanModerate { get; }
         
         List<string> Identifiers { get; }
         

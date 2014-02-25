@@ -85,6 +85,21 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        private bool _canModerate;
+        [JsonProperty(PropertyName = "canModerate")]
+        public bool CanModerate
+        {
+            get { return _canModerate; }
+            set
+            {
+                if (value != _canModerate)
+                {
+                    _canModerate = value;
+                    this.NotifyPropertyChanged("CanModerate");
+                }
+            }
+        }
+
         [JsonProperty(PropertyName = "identifiers")]
         public List<string> Identifiers { get; set; }
 

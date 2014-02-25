@@ -26,11 +26,35 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        private string _founder;
         [JsonProperty(PropertyName = "founder")]
-        public string Founder { get; set; }
+        public string Founder
+        {
+            get { return _founder; }
+            set
+            {
+                if (value != _founder)
+                {
+                    _founder = value;
+                    this.NotifyPropertyChanged("Founder");
+                }
+            }
+        }
 
+        private DsqSettings _settings;
         [JsonProperty(PropertyName = "settings")]
-        public DsqSettings Settings { get; set; }
+        public DsqSettings Settings
+        {
+            get { return _settings; }
+            set
+            {
+                if (value != _settings)
+                {
+                    _settings = value;
+                    this.NotifyPropertyChanged("Settings");
+                }
+            }
+        }
 
         private string _url;
         [JsonProperty(PropertyName = "url")]
@@ -47,14 +71,50 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        private DsqFavicon _favicon;
         [JsonProperty(PropertyName = "favicon")]
-        public DsqFavicon Favicon { get; set; }
+        public DsqFavicon Favicon
+        {
+            get { return _favicon; }
+            set
+            {
+                if (value != _favicon)
+                {
+                    _favicon = value;
+                    this.NotifyPropertyChanged("Favicon");
+                }
+            }
+        }
 
+        private string _language;
         [JsonProperty(PropertyName = "language")]
-        public string Language { get; set; }
+        public string Language
+        {
+            get { return _language; }
+            set
+            {
+                if (value != _language)
+                {
+                    _language = value;
+                    this.NotifyPropertyChanged("Language");
+                }
+            }
+        }
 
+        private string _id;
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        public string Id
+        {
+            get { return _id; }
+            set
+            {
+                if (value != _id)
+                {
+                    _id = value;
+                    this.NotifyPropertyChanged("Id");
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propertyName)

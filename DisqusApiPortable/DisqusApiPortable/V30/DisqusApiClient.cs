@@ -1702,7 +1702,7 @@ namespace Disqus.Api.V30
 
         private string[] _validOrders = { "asc", "desc", "popular", "best" };
 
-        private string[] _validInclude= { "approved", "unapproved", "flagged", "deleted", "spam", "open", "closed", "killed" };
+        private string[] _validInclude= { "highlighted", "approved", "unapproved", "flagged", "deleted", "spam", "open", "closed", "killed" };
 
         protected string GetArgument(string key, string value, bool required = false)
         {
