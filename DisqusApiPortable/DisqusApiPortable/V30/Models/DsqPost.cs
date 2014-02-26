@@ -7,6 +7,32 @@ namespace Disqus.Api.V30.Models
 {
     public class DsqPost : IDsqPost, INotifyPropertyChanged
     {
+        public DsqPost()
+        {
+
+        }
+
+        public DsqPost(IDsqPost post)
+        {
+            Dislikes = post.Dislikes;
+            NumReports = post.NumReports;
+            Likes = post.Likes;
+            Message = post.Message;
+            Id = post.Id;
+            IsDeleted = post.IsDeleted;
+            IsHighlighted = post.IsHighlighted;
+            Author = post.Author;
+            Media = post.Media;
+            UserScore = post.UserScore;
+            IsSpam = post.IsSpam;
+            IsApproved = post.IsApproved;
+            IsFlagged = post.IsFlagged;
+            RawMessage = post.RawMessage;
+            Points = post.Points;
+            IsEdited = post.IsEdited;
+            IpAddress = post.IpAddress;
+        }
+
         private int _dislikes;
         [JsonProperty(PropertyName = "dislikes")]
         public int Dislikes

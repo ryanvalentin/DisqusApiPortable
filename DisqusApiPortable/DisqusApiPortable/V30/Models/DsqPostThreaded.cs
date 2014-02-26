@@ -12,6 +12,11 @@ namespace Disqus.Api.V30.Models
             this.UpvotingUsers = new ObservableCollection<DsqUser>();
         }
 
+        public DsqPostThreaded(IDsqPost post) : base(post)
+        {
+            this.UpvotingUsers = new ObservableCollection<DsqUser>();
+        }
+
         /// <summary>
         /// Threaded comments can expand a forum, but we don't really need to
         /// </summary>

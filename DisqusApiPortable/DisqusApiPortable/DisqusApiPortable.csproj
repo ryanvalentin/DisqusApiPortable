@@ -56,6 +56,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\ErrorHelper.cs" />
     <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\DistinctBy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
