@@ -1434,7 +1434,7 @@ namespace Disqus.Api.V30
         /// <param name="url">URL (defined by RFC 3986)</param>
         /// <returns>The updated user object</returns>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
-        public async Task<DsqObjectResponse<DsqUser>> UpdateUserProfileAsync(string name, string about, string location, Uri url)
+        public async Task<DsqObjectResponse<DsqUser>> UpdateUserProfileAsync(string name, string about, string location, string url)
         {
             if (name.Length < 2 || name.Length > 30)
                 throw new DsqApiException("New name doesn't satisfy length requirements, must be 2 or more characters and up to 30. Was: " + name.Length.ToString(), 2);
@@ -1443,9 +1443,9 @@ namespace Disqus.Api.V30
             arguments = PostArgument(arguments, "name", name);
             arguments = PostArgument(arguments, "about", about);
             arguments = PostArgument(arguments, "location", location);
-            arguments = PostArgument(arguments, "url", url.OriginalString);
+            arguments = PostArgument(arguments, "url", url);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUser>>(await PostDataStreamAsync(Constants.Endpoints.Users.ListForums, arguments));
+            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUser>>(await PostDataStreamAsync(Constants.Endpoints.Users.UpdateProfile, arguments));
         }
 
         #endregion
