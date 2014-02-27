@@ -1628,7 +1628,7 @@ namespace Disqus.Api.V30
             }
         }
 
-        private HttpClient BuildHttpClient(bool isPostRequest = false)
+        protected HttpClient BuildHttpClient(bool isPostRequest = false)
         {
             HttpClientHandler gzipHandler = new HttpClientHandler();
 
