@@ -93,8 +93,20 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        private string _id;
         [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
+        public string Id
+        {
+            get { return _id; }
+            set
+            {
+                if (value != _id)
+                {
+                    _id = value;
+                    this.NotifyPropertyChanged("Id");
+                }
+            }
+        }
 
         private bool _isDeleted;
         [JsonProperty(PropertyName = "isDeleted")]

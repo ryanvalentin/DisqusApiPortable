@@ -41,5 +41,20 @@ namespace Disqus.Api.V30.Models
                 }
             }
         }
+
+        private DsqPostThreaded _highlightedPost;
+        [JsonProperty(PropertyName = "highlightedPost")]
+        public DsqPostThreaded HighlightedPost
+        {
+            get { return _highlightedPost; }
+            set
+            {
+                if (value != _highlightedPost)
+                {
+                    _highlightedPost = value;
+                    this.NotifyPropertyChanged("HighlightedPost");
+                }
+            }
+        }
     }
 }
