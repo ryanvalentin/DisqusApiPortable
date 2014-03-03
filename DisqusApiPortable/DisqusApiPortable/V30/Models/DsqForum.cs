@@ -168,20 +168,80 @@ namespace Disqus.Api.V30.Models
 
     public class DsqSettings : INotifyPropertyChanged
     {
+        private bool _backplaneEnabled;
         [JsonProperty(PropertyName = "backplaneEnabled")]
-        public bool BackplaneEnabled { get; set; }
+        public bool BackplaneEnabled
+        {
+            get { return _backplaneEnabled; }
+            set
+            {
+                if (value != _backplaneEnabled)
+                {
+                    _backplaneEnabled = value;
+                    this.NotifyPropertyChanged("BackplaneEnabled");
+                }
+            }
+        }
 
+        private bool _ssoRequired;
         [JsonProperty(PropertyName = "ssoRequired")]
-        public bool SsoRequired { get; set; }
+        public bool SsoRequired
+        {
+            get { return _ssoRequired; }
+            set
+            {
+                if (value != _ssoRequired)
+                {
+                    _ssoRequired = value;
+                    this.NotifyPropertyChanged("SsoRequired");
+                }
+            }
+        }
 
+        private bool _allowAnonPost;
         [JsonProperty(PropertyName = "allowAnonPost")]
-        public bool AllowAnonPost { get; set; }
+        public bool AllowAnonPost
+        {
+            get { return _allowAnonPost; }
+            set
+            {
+                if (value != _allowAnonPost)
+                {
+                    _allowAnonPost = value;
+                    this.NotifyPropertyChanged("AllowAnonPost");
+                }
+            }
+        }
 
+        private bool _allowMedia;
         [JsonProperty(PropertyName = "allowMedia")]
-        public bool AllowMedia { get; set; }
+        public bool AllowMedia
+        {
+            get { return _allowMedia; }
+            set
+            {
+                if (value != _allowMedia)
+                {
+                    _allowMedia = value;
+                    this.NotifyPropertyChanged("AllowMedia");
+                }
+            }
+        }
 
+        private bool _audienceSyncEnabed;
         [JsonProperty(PropertyName = "audienceSyncEnabled")]
-        public bool AudienceSyncEnabled { get; set; }
+        public bool AudienceSyncEnabled
+        {
+            get { return _audienceSyncEnabed; }
+            set
+            {
+                if (value != _audienceSyncEnabed)
+                {
+                    _audienceSyncEnabed = value;
+                    this.NotifyPropertyChanged("AudienceSyncEnabled");
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propertyName)
