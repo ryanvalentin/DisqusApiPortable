@@ -124,9 +124,9 @@ namespace Disqus.Api.V30.Models
             }
         }
 
-        private bool _isHighlighted;
+        private bool? _isHighlighted;
         [JsonProperty(PropertyName = "isHighlighted")]
-        public bool IsHighlighted
+        public bool? IsHighlighted
         {
             get { return _isHighlighted; }
             set

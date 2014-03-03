@@ -31,7 +31,7 @@ namespace Disqus.Api.V30.Models
 
         bool IsFlagged { get; set; }
 
-        bool IsHighlighted { get; set; }
+        bool? IsHighlighted { get; set; }
 
         string RawMessage { get; set; }
 
