@@ -20,7 +20,7 @@ namespace Disqus.Api.Extensions
             if (string.IsNullOrEmpty(input))
                 return input;
 
-            return input.Length <= maxLength ? input : input.Substring(0, maxLength) + "...";
+            return input.Truncate(maxLength) + "...";
         }
     }
 }

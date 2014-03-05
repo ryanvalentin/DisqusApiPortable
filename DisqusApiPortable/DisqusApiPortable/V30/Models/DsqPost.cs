@@ -31,6 +31,7 @@ namespace Disqus.Api.V30.Models
             Points = post.Points;
             IsEdited = post.IsEdited;
             IpAddress = post.IpAddress;
+            CreatedAt = post.CreatedAt;
         }
 
         private int _dislikes;

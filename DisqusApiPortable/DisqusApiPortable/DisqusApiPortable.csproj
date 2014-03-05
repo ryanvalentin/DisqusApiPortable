@@ -58,7 +58,6 @@
   <ItemGroup>
     <Compile Include="Extensions\ErrorHelper.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Extensions\TaskExtensions.cs" />
     <Compile Include="Extensions\DistinctBy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="V30\Authentication\DsqAuth.cs" />
