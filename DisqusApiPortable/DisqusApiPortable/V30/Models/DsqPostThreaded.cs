@@ -77,7 +77,7 @@ namespace Disqus.Api.V30.Models
         }
 
         [JsonProperty(PropertyName = "parent")]
-        public long? Parent { get; set; }
+        public string Parent { get; set; }
 
         #region JSON ignored properties
 
