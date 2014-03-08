@@ -817,7 +817,7 @@ namespace Disqus.Api.V30
         /// <summary>
         /// Private method to retrieve thread details
         /// </summary>
-        private async Task<DsqObjectResponse<DsqThreadExpanded>> GetTDetailsAsync(string thread, string forum = "")
+        public async Task<DsqObjectResponse<DsqThreadExpanded>> GetTDetailsAsync(string thread, string forum = "")
         {
             string endpoint = Constants.Endpoints.Threads.Details
                 + GetAuthentication()
