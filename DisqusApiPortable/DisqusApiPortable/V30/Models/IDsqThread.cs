@@ -11,7 +11,7 @@ namespace Disqus.Api.V30.Models
 
         string Title { get; }
 
-        int UserScore { get; }
+        int UserScore { get; set; }
 
         bool CanPost { get; }
 
@@ -32,8 +32,8 @@ namespace Disqus.Api.V30.Models
         bool UserSubscription { get; }
         
         string Link { get; }
-        
-        int Likes { get; }
+
+        int Likes { get; set; }
 
         string Message { get; }
 
