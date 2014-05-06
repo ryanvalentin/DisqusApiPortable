@@ -55,6 +55,21 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        private string _cleanTitle;
+        [JsonProperty(PropertyName = "clean_title")]
+        public string CleanTitle
+        {
+            get { return _cleanTitle; }
+            set
+            {
+                if (value != _cleanTitle)
+                {
+                    _cleanTitle = value;
+                    this.NotifyPropertyChanged("CleanTitle");
+                }
+            }
+        }
+
         private int _userScore;
         [JsonProperty(PropertyName = "userScore")]
         public int UserScore

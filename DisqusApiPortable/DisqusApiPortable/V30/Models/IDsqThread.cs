@@ -11,6 +11,8 @@ namespace Disqus.Api.V30.Models
 
         string Title { get; }
 
+        string CleanTitle { get; }
+
         int UserScore { get; set; }
 
         bool CanPost { get; }
