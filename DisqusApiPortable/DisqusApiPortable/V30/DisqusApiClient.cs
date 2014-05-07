@@ -27,18 +27,6 @@ namespace Disqus.Api.V30
 
         #region API Methods
 
-        #region Applications endpoints
-
-        // TODO
-
-        #endregion
-
-        #region Blacklists endpoints
-
-        // TODO
-
-        #endregion
-
         #region Forums endpoints
 
         /// <summary>
