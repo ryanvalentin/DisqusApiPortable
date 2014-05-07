@@ -4,13 +4,13 @@ namespace Disqus.Api.V30.Models
 {
     public interface IDsqUser
     {
-        string Username { get; }
+        string Username { get; set; }
 
-        string About { get; }
+        string About { get; set; }
 
-        string Name { get; }
+        string Name { get; set; }
 
-        string Url { get; }
+        string Url { get; set; }
 
         bool IsAnonymous { get; }
 
@@ -24,7 +24,7 @@ namespace Disqus.Api.V30.Models
 
         string Id { get; }
 
-        string Location { get; }
+        string Location { get; set; }
 
         bool IsPrivate { get; set; }
 

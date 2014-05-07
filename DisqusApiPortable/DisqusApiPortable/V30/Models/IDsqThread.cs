@@ -7,11 +7,11 @@ namespace Disqus.Api.V30.Models
     {
         string Feed { get; }
 
-        string Category { get; }
+        string Category { get; set; }
 
-        string Title { get; }
+        string Title { get; set; }
 
-        string CleanTitle { get; }
+        string CleanTitle { get; set; }
 
         int UserScore { get; set; }
 
@@ -20,28 +20,28 @@ namespace Disqus.Api.V30.Models
         bool CanModerate { get; }
         
         List<string> Identifiers { get; }
-        
-        int Dislikes { get; }
+
+        int Dislikes { get; set; }
         
         DateTime CreatedAt { get; }
-        
-        string Slug { get; }
-        
-        bool IsClosed { get; }
-        
-        int Posts { get; }
 
-        bool UserSubscription { get; }
-        
-        string Link { get; }
+        string Slug { get; set; }
+
+        bool IsClosed { get; set; }
+
+        int Posts { get; set; }
+
+        bool UserSubscription { get; set; }
+
+        string Link { get; set; }
 
         int Likes { get; set; }
 
-        string Message { get; }
+        string Message { get; set; }
 
         string Id { get; }
 
-        bool IsDeleted { get; }
+        bool IsDeleted { get; set; }
 
         string ForumId { get; }
 
