@@ -41,5 +41,23 @@ namespace Disqus.Api.V30.Models
                 }
             }
         }
+
+        private string _thumbnailUrl;
+        [JsonIgnore]
+        public string ThumbnailUrl
+        {
+            get { return _thumbnailUrl; }
+            set
+            {
+                if (value != _thumbnailUrl)
+                {
+                    if (value.StartsWith("//"))
+                        value = "http:" + value;
+
+                    _thumbnailUrl = value;
+                    this.NotifyPropertyChanged("ThumbnailUrl");
+                }
+            }
+        }
     }
 }
