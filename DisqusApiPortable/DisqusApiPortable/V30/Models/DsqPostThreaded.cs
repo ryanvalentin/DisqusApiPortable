@@ -8,12 +8,16 @@ namespace Disqus.Api.V30.Models
     {
         public DsqPostThreaded()
         {
+#if WINDOWS
             this.UpvotingUsers = new ObservableCollection<DsqUser>();
+#endif
         }
 
         public DsqPostThreaded(IDsqPost post) : base(post)
         {
+#if WINDOWS
             this.UpvotingUsers = new ObservableCollection<DsqUser>();
+#endif
         }
 
         /// <summary>
@@ -95,8 +99,10 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+#if WINDOWS
         [JsonIgnore]
         public ObservableCollection<DsqUser> UpvotingUsers { get; set; }
+#endif
 
         #endregion
     }
