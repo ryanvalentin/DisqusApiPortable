@@ -68,6 +68,7 @@
     <Compile Include="V30\Constants\Endpoints.cs" />
     <Compile Include="V30\DisqusApiClient.cs" />
     <Compile Include="V30\DsqApiException.cs" />
+    <Compile Include="V30\DsqHttpClient.cs" />
     <Compile Include="V30\Models\DsqApproxLoc.cs" />
     <Compile Include="V30\Models\DsqAvatar.cs" />
     <Compile Include="V30\Models\DsqCursor.cs" />

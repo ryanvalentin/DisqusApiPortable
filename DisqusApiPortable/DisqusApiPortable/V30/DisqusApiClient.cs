@@ -19,9 +19,12 @@ namespace Disqus.Api.V30
         public DisqusApiClient(DsqAuth auth, Uri referrer)
         {
             this.DisqusAuthentication = auth;
-            this.referrer = referrer;
-            this.host = referrer.Host;
+            //this.referrer = referrer;
+            //this.host = referrer.Host;
+            this._dsqHttpClient = new DsqHttpClient(DsqHttpClient.GetHandler(), referrer);
         }
+
+        protected DsqHttpClient _dsqHttpClient;
 
         public DsqAuth DisqusAuthentication { get; set; }
 
@@ -42,7 +45,7 @@ namespace Disqus.Api.V30
             arguments = PostArgument(arguments, "user", user, true);
             arguments = PostArgument(arguments, "forum", forum, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<Dictionary<string, long?>>>(await PostDataStreamAsync(Constants.Endpoints.Forums.AddModerator, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<Dictionary<string, long?>>>(Constants.Endpoints.Forums.AddModerator, arguments);
         }
 
         /// <summary>
@@ -60,7 +63,7 @@ namespace Disqus.Api.V30
             arguments = PostArgument(arguments, "name", name, true);
             arguments = PostArgument(arguments, "short_name", shortname, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqForum>>(await PostDataStreamAsync(Constants.Endpoints.Forums.Create, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqForum>>(Constants.Endpoints.Forums.Create, arguments);
         }
 
         /// <summary>
@@ -75,7 +78,7 @@ namespace Disqus.Api.V30
                 + GetAuthentication()
                 + GetArgument("forum", forum, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqForum>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqObjectResponse<DsqForum>>(endpoint);
         }
 
         /// <summary>
@@ -90,7 +93,7 @@ namespace Disqus.Api.V30
                 + GetAuthentication()
                 + GetArgument("forum", forum, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<bool>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqObjectResponse<bool>>(endpoint);
         }
 
         /// <summary>
@@ -105,7 +108,7 @@ namespace Disqus.Api.V30
                 + GetAuthentication(true)
                 + GetArgument("forum", forum, true);
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListResponse<DsqUser>>(endpoint);
         }
 
         /// <summary>
@@ -125,7 +128,7 @@ namespace Disqus.Api.V30
                 + GetArgument("cursor", cursor)
                 + GetArgument("limit", ClampLimit(limit));
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUserForumActive>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqUserForumActive>>(endpoint);
         }
 
         /// <summary>
@@ -145,7 +148,7 @@ namespace Disqus.Api.V30
                 + GetArgument("cursor", cursor)
                 + GetArgument("limit", ClampLimit(limit));
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqUser>>(endpoint);
         }
 
         /// <summary>
@@ -168,7 +171,7 @@ namespace Disqus.Api.V30
                 + GetArgument("order", order)
                 + GetArgument("since_id", since_id);
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqUser>>(endpoint);
         }
 
         /// <summary>
@@ -182,7 +185,7 @@ namespace Disqus.Api.V30
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "moderator", moderator_id, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<Dictionary<string, long?>>>(await PostDataStreamAsync(Constants.Endpoints.Forums.RemoveModerator, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<Dictionary<string, long?>>>(Constants.Endpoints.Forums.RemoveModerator, arguments);
         }
 
         #endregion
@@ -200,7 +203,7 @@ namespace Disqus.Api.V30
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "post", post_id, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Approve, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(Constants.Endpoints.Posts.Approve, arguments);
         }
 
         /// <summary>
@@ -218,7 +221,7 @@ namespace Disqus.Api.V30
                 arguments = PostArgument(arguments, "post", id, true);
             }
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Approve, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(Constants.Endpoints.Posts.Approve, arguments);
         }
 
         /// <summary>
@@ -236,7 +239,7 @@ namespace Disqus.Api.V30
             arguments = PostArgument(arguments, "thread", thread_id, true);
             arguments = PostArgument(arguments, "parent", parent_id);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqPostThreaded>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Create, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqPostThreaded>>(Constants.Endpoints.Posts.Create, arguments);
         }
 
         /// <summary>
@@ -267,7 +270,7 @@ namespace Disqus.Api.V30
             if (author_url != null)
                 arguments = PostArgument(arguments, "author_url", author_url.OriginalString, false);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqPostThreaded>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Create, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqPostThreaded>>(Constants.Endpoints.Posts.Create, arguments);
         }
 
         /// <summary>
@@ -284,7 +287,7 @@ namespace Disqus.Api.V30
                 + GetArgument("related", "forum")
                 + GetArgument("related", "thread");
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqPostExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqObjectResponse<DsqPostExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -303,7 +306,7 @@ namespace Disqus.Api.V30
                 + GetArgument("related", "thread")
                 + GetArgument("depth", ClampLimit(depth, 1, 10));
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<DsqPostExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListResponse<DsqPostExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -335,7 +338,7 @@ namespace Disqus.Api.V30
                 endpoint += GetArgument("forum", forum);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqPostExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqPostExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -381,7 +384,7 @@ namespace Disqus.Api.V30
             if (since.HasValue)
                 endpoint += ConvertToTimestamp(since.Value);
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqPostExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqPostExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -414,7 +417,7 @@ namespace Disqus.Api.V30
                 endpoint += GetArgument("forum", forum);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<DsqPostExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListResponse<DsqPostExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -428,7 +431,7 @@ namespace Disqus.Api.V30
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "post", post_id, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Remove, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(Constants.Endpoints.Posts.Remove, arguments);
         }
 
         /// <summary>
@@ -446,7 +449,7 @@ namespace Disqus.Api.V30
                 arguments = PostArgument(arguments, "post", id, true);
             }
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Remove, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(Constants.Endpoints.Posts.Remove, arguments);
         }
 
         /// <summary>
@@ -460,7 +463,7 @@ namespace Disqus.Api.V30
             List<KeyValuePair<string, string>> arguments = PostAuthentication();
             arguments = PostArgument(arguments, "post", post_id, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqPostThreaded>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Report, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqPostThreaded>>(Constants.Endpoints.Posts.Report, arguments);
         }
 
         /// <summary>
@@ -474,7 +477,7 @@ namespace Disqus.Api.V30
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "post", post_id, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Restore, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(Constants.Endpoints.Posts.Restore, arguments);
         }
 
         /// <summary>
@@ -492,7 +495,7 @@ namespace Disqus.Api.V30
                 arguments = PostArgument(arguments, "post", id, true);
             }
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Restore, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(Constants.Endpoints.Posts.Restore, arguments);
         }
 
         /// <summary>
@@ -506,7 +509,7 @@ namespace Disqus.Api.V30
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "post", post_id, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Spam, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(Constants.Endpoints.Posts.Spam, arguments);
         }
 
         /// <summary>
@@ -524,7 +527,7 @@ namespace Disqus.Api.V30
                 arguments = PostArgument(arguments, "post", id, true);
             }
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Spam, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<List<Dictionary<string, string>>>>(Constants.Endpoints.Posts.Spam, arguments);
         }
 
         /// <summary>
@@ -540,7 +543,7 @@ namespace Disqus.Api.V30
             arguments = PostArgument(arguments, "message", message, true);
             arguments = PostArgument(arguments, "post", post_id, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqPostThreaded>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Update, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqPostThreaded>>(Constants.Endpoints.Posts.Update, arguments);
         }
 
         /// <summary>
@@ -591,7 +594,7 @@ namespace Disqus.Api.V30
             arguments = PostArgument(arguments, "vote", vote, true);
             arguments = PostArgument(arguments, "post", post_id, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqVoteObject>>(await PostDataStreamAsync(Constants.Endpoints.Posts.Vote, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqVoteObject>>(Constants.Endpoints.Posts.Vote, arguments);
         }
 
         #endregion
@@ -603,16 +606,13 @@ namespace Disqus.Api.V30
         /// </summary>
         /// <param name="target">Looks up a topic by ID (slug)</param>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        [Obsolete("API still works, but topic following it's not supported in the product")]
         public async Task FollowTopicAsync(string target)
         {
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "target", target, true);
 
-            var response = await PostDataStreamAsync(Constants.Endpoints.Topics.Follow, arguments);
-
-            //
-            // Nothing in result, so just dispose if successful
-            response.Dispose();
+            var response = await _dsqHttpClient.PostDsqDataAsync<object>(Constants.Endpoints.Topics.Follow, arguments);
         }
 
         /// <summary>
@@ -620,16 +620,13 @@ namespace Disqus.Api.V30
         /// </summary>
         /// <param name="target">Looks up a topic by ID (slug)</param>
         /// <exception cref="Disqus.Api.V30.DsqApiException">Error response returned from the Disqus API</exception>
+        [Obsolete("API still works, but topic following it's not supported in the product")]
         public async Task UnfollowTopicAsync(string target)
         {
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "target", target, true);
 
-            var response = await PostDataStreamAsync(Constants.Endpoints.Topics.Unfollow, arguments);
-
-            //
-            // Nothing in result, so just dispose if successful
-            response.Dispose();
+            var response = await _dsqHttpClient.PostDsqDataAsync<object>(Constants.Endpoints.Topics.Unfollow, arguments);
         }
 
         /// <summary>
@@ -648,7 +645,7 @@ namespace Disqus.Api.V30
                 + GetArgument("limit", ClampLimit(limit))
                 + GetArgument("order", order);
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqTopic>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqTopic>>(endpoint);
         }
 
         /// <summary>
@@ -671,7 +668,7 @@ namespace Disqus.Api.V30
                 + GetArgument("order", order)
                 + GetArgument("since_id", since_id);
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqUser>>(endpoint);
         }
 
         /// <summary>
@@ -692,7 +689,7 @@ namespace Disqus.Api.V30
                 + GetArgument("limit", ClampLimit(limit))
                 + GetArgument("order", order);
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqForum>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqForum>>(endpoint);
         }
 
         #endregion
@@ -715,7 +712,7 @@ namespace Disqus.Api.V30
                 + GetArgument("thread", thread, true)
                 + GetArgument("forum", forum, true);
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<DsqPostExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListResponse<DsqPostExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -733,7 +730,7 @@ namespace Disqus.Api.V30
                 arguments = PostArgument(arguments, "thread", t, true);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<Dictionary<string, string>>>(await PostDataStreamAsync(Constants.Endpoints.Threads.Close, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqListResponse<Dictionary<string, string>>>(Constants.Endpoints.Threads.Close, arguments);
         }
         
         /// <summary>
@@ -755,7 +752,7 @@ namespace Disqus.Api.V30
             arguments = PostArgument(arguments, "identifier", identifier);
             arguments = PostArgument(arguments, "message", content);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqThreadCollapsed>>(await PostDataStreamAsync(Constants.Endpoints.Threads.Create, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqThreadCollapsed>>(Constants.Endpoints.Threads.Create, arguments);
         }
 
         /// <summary>
@@ -814,7 +811,9 @@ namespace Disqus.Api.V30
                 + GetArgument("thread", thread, true)
                 + GetArgument("forum", forum);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqThreadExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqObjectResponse<DsqThreadExpanded>>(endpoint);
+
+            //return await _dsqHttpClient.GetDsqDataAsync<DsqObjectResponse<DsqThreadExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -863,7 +862,7 @@ namespace Disqus.Api.V30
                 endpoint += GetArgument("include", i);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqThreadExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqThreadExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -898,7 +897,7 @@ namespace Disqus.Api.V30
                 endpoint += GetArgument("include", i);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<DsqThreadExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListResponse<DsqThreadExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -920,7 +919,7 @@ namespace Disqus.Api.V30
                 + GetArgument("interval", interval)
                 + GetArgument("limit", ClampLimit(limit));
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<DsqThreadTopPost>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListResponse<DsqThreadTopPost>>(endpoint);
         }
 
         /// <summary>
@@ -996,7 +995,7 @@ namespace Disqus.Api.V30
                 endpoint += GetArgument("include", i);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqPostThreaded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqPostThreaded>>(endpoint);
         }
 
         /// <summary>
@@ -1014,7 +1013,7 @@ namespace Disqus.Api.V30
                 arguments = PostArgument(arguments, "thread", t, true);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<Dictionary<string, string>>>(await PostDataStreamAsync(Constants.Endpoints.Threads.Open, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqListResponse<Dictionary<string, string>>>(Constants.Endpoints.Threads.Open, arguments);
         }
 
         /// <summary>
@@ -1032,7 +1031,7 @@ namespace Disqus.Api.V30
                 arguments = PostArgument(arguments, "thread", t, true);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<Dictionary<string, string>>>(await PostDataStreamAsync(Constants.Endpoints.Threads.Remove, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqListResponse<Dictionary<string, string>>>(Constants.Endpoints.Threads.Remove, arguments);
         }
 
         /// <summary>
@@ -1050,7 +1049,7 @@ namespace Disqus.Api.V30
                 arguments = PostArgument(arguments, "thread", t, true);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<Dictionary<string, string>>>(await PostDataStreamAsync(Constants.Endpoints.Threads.Restore, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqListResponse<Dictionary<string, string>>>(Constants.Endpoints.Threads.Restore, arguments);
         }
 
         /// <summary>
@@ -1071,7 +1070,7 @@ namespace Disqus.Api.V30
                 endpoint += GetArgument("thread", t);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<DsqThreadExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListResponse<DsqThreadExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -1094,7 +1093,7 @@ namespace Disqus.Api.V30
                 endpoint += GetArgument("thread", t);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<DsqThreadExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListResponse<DsqThreadExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -1120,7 +1119,7 @@ namespace Disqus.Api.V30
             if (url != null && url.IsAbsoluteUri)
                 arguments = PostArgument(arguments, "url", url.OriginalString);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqThreadCollapsed>>(await PostDataStreamAsync(Constants.Endpoints.Threads.Update, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqThreadCollapsed>>(Constants.Endpoints.Threads.Update, arguments);
         }
 
         /// <summary>
@@ -1154,7 +1153,7 @@ namespace Disqus.Api.V30
             arguments = PostArgument(arguments, "thread", thread_id, true);
             arguments = PostArgument(arguments, "vote", vote);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqThreadCollapsed>>(await PostDataStreamAsync(Constants.Endpoints.Threads.Vote, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqThreadCollapsed>>(Constants.Endpoints.Threads.Vote, arguments);
         }
 
         #endregion
@@ -1175,7 +1174,7 @@ namespace Disqus.Api.V30
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "username", new_username, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUser>>(await PostDataStreamAsync(Constants.Endpoints.Users.CheckUsername, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqUser>>(Constants.Endpoints.Users.CheckUsername, arguments);
         }
 
         /// <summary>
@@ -1190,7 +1189,7 @@ namespace Disqus.Api.V30
                 + GetAuthentication()
                 + GetArgument("user", user);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUserDetails>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqObjectResponse<DsqUserDetails>>(endpoint);
         }
 
         /// <summary>
@@ -1204,7 +1203,7 @@ namespace Disqus.Api.V30
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "target", target, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUser>>(await PostDataStreamAsync(Constants.Endpoints.Users.Follow, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqUser>>(Constants.Endpoints.Users.Follow, arguments);
         }
 
         /// <summary>
@@ -1218,7 +1217,7 @@ namespace Disqus.Api.V30
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "target", target, true);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUser>>(await PostDataStreamAsync(Constants.Endpoints.Users.Unfollow, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqUser>>(Constants.Endpoints.Users.Unfollow, arguments);
         }
 
         /// <summary>
@@ -1239,7 +1238,7 @@ namespace Disqus.Api.V30
                 + GetArgument("order", order)
                 + GetArgument("user", user);
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqForum>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqForum>>(endpoint);
         }
 
         /// <summary>
@@ -1256,7 +1255,7 @@ namespace Disqus.Api.V30
                 + GetArgument("limit", ClampLimit(limit))
                 + GetArgument("user", user);
 
-            return DeserializeStreamToObjectAsync<DsqListResponse<DsqForum>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListResponse<DsqForum>>(endpoint);
         }
 
         /// <summary>
@@ -1291,7 +1290,7 @@ namespace Disqus.Api.V30
                 endpoint += GetArgument("forum", f);
             }
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqThreadExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqThreadExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -1312,7 +1311,7 @@ namespace Disqus.Api.V30
                 + GetArgument("limit", ClampLimit(limit))
                 + GetArgument("user", user);
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqUser>>(endpoint);
         }
 
         /// <summary>
@@ -1333,7 +1332,7 @@ namespace Disqus.Api.V30
                 + GetArgument("limit", ClampLimit(limit))
                 + GetArgument("user", user);
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqUser>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqUser>>(endpoint);
         }
 
         /// <summary>
@@ -1354,7 +1353,7 @@ namespace Disqus.Api.V30
                 + GetArgument("limit", ClampLimit(limit))
                 + GetArgument("user", user);
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqForum>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqForum>>(endpoint);
         }
 
         /// <summary>
@@ -1377,7 +1376,7 @@ namespace Disqus.Api.V30
                 + GetArgument("related", "forum")
                 + GetArgument("related", "thread");
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqPostExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqPostExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -1410,7 +1409,7 @@ namespace Disqus.Api.V30
             if (since.HasValue)
                 endpoint += ConvertToTimestamp(since.Value);
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqPostExpanded>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqPostExpanded>>(endpoint);
         }
 
         /// <summary>
@@ -1433,7 +1432,7 @@ namespace Disqus.Api.V30
             arguments = PostArgument(arguments, "location", location);
             arguments = PostArgument(arguments, "url", url);
 
-            return DeserializeStreamToObjectAsync<DsqObjectResponse<DsqUser>>(await PostDataStreamAsync(Constants.Endpoints.Users.UpdateProfile, arguments));
+            return await _dsqHttpClient.PostDsqDataAsync<DsqObjectResponse<DsqUser>>(Constants.Endpoints.Users.UpdateProfile, arguments);
         }
 
         #endregion
@@ -1490,11 +1489,11 @@ namespace Disqus.Api.V30
             if (method == "add")
             {
                 arguments = PostArgument(arguments, "notes", notes);
-                return DeserializeStreamToObjectAsync<DsqListResponse<DsqFilter>>(await PostDataStreamAsync(Constants.Endpoints.Whitelists.Add, arguments));
+                return await _dsqHttpClient.PostDsqDataAsync<DsqListResponse<DsqFilter>>(Constants.Endpoints.Whitelists.Add, arguments);
             }
             else if (method == "remove")
             {
-                return DeserializeStreamToObjectAsync<DsqListResponse<DsqFilter>>(await PostDataStreamAsync(Constants.Endpoints.Whitelists.Remove, arguments));
+                return await _dsqHttpClient.PostDsqDataAsync<DsqListResponse<DsqFilter>>(Constants.Endpoints.Whitelists.Remove, arguments);
             }
 
             throw new ArgumentOutOfRangeException("method", "Method must either be 'add' or 'remove'");
@@ -1529,133 +1528,11 @@ namespace Disqus.Api.V30
             if (include_users)
                 endpoint += GetArgument("type", "user");
 
-            return DeserializeStreamToObjectAsync<DsqListCursorResponse<DsqFilter>>(await GetDataStreamAsync(endpoint));
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<DsqFilter>>(endpoint);
         }
 
 
         #endregion
-
-        #endregion
-
-        #region HTTP Client
-
-        private HttpClient _httpClient { get; set; }
-        private string _currentClientMethod { get; set; }
-        protected Uri referrer { get; set; }
-        protected string host { get; set; }
-
-        protected async Task<StreamReader> GetDataStreamAsync(string endpoint)
-        {
-            if (!NetworkInterface.GetIsNetworkAvailable())
-                throw new DsqApiException("No internet connection was available");
-
-            if (_httpClient == null || _currentClientMethod == "POST")
-            {
-                if (_httpClient != null)
-                    _httpClient.Dispose();
-
-                _httpClient = BuildHttpClient();
-            }
-
-            var response = await _httpClient.GetAsync(new Uri(endpoint, UriKind.Absolute));
-
-            if (response.IsSuccessStatusCode)
-            {
-                return new StreamReader(await response.Content.ReadAsStreamAsync());
-            }
-            else
-            {
-                try
-                {
-                    string raw = await response.Content.ReadAsStringAsync();
-
-                    JObject json = JObject.Parse(raw);
-
-                    throw new DsqApiException((string)json["response"], (int)json["code"]);
-                }
-                catch (Exception ex)
-                {
-                    throw new DsqApiException(ex.Message + "; " + response.Content.ReadAsStringAsync());
-                }
-            }
-        }
-
-        protected async Task<StreamReader> PostDataStreamAsync(string endpoint, List<KeyValuePair<string, string>> postArguments)
-        {
-            if (!NetworkInterface.GetIsNetworkAvailable())
-                throw new DsqApiException("No internet connection was available");
-
-            if (_httpClient == null || _currentClientMethod == "GET")
-            {
-                if (_httpClient != null)
-                    _httpClient.Dispose();
-
-                _httpClient = BuildHttpClient(true);
-            }
-
-            var response = await _httpClient.PostAsync(new Uri(endpoint, UriKind.Absolute), new FormUrlEncodedContent(postArguments));
-
-            if (response.IsSuccessStatusCode)
-            {
-                return new StreamReader(await response.Content.ReadAsStreamAsync());
-            }
-            else
-            {
-                try
-                {
-                    string raw = await response.Content.ReadAsStringAsync();
-
-                    JObject json = JObject.Parse(raw);
-
-                    throw new DsqApiException((string)json["response"], (int)json["code"]);
-                }
-                catch (Exception ex)
-                {
-                    throw new DsqApiException(ex.Message + "; " + response.Content.ReadAsStringAsync());
-                }
-            }
-        }
-
-        protected HttpClient BuildHttpClient(bool isPostRequest = false)
-        {
-            HttpClientHandler gzipHandler = new HttpClientHandler();
-
-            if (gzipHandler.SupportsAutomaticDecompression)
-                gzipHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            HttpClient client = new HttpClient(gzipHandler);
-
-            //
-            // Build headers
-            client.DefaultRequestHeaders.Referrer = this.referrer;
-            client.DefaultRequestHeaders.Host = this.host;
-            client.DefaultRequestHeaders.Add("User-Agent", String.Format("Disqus SDK for .NET"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            if (isPostRequest)
-            {
-                _currentClientMethod = "POST";
-                client.DefaultRequestHeaders.Add("ContentType", "application/x-www-form-urlencoded");
-            }
-            else
-            {
-                _currentClientMethod = "GET";
-            }
-
-            return client;
-        }
-
-        protected T DeserializeStreamToObjectAsync<T>(StreamReader stream)
-        {
-            using (JsonReader reader = new JsonTextReader(stream))
-            {
-                JsonSerializer serializer = new JsonSerializer();
-
-                //
-                // Return serialized JSON
-                return serializer.Deserialize<T>(reader);
-            }
-        }
 
         #endregion
 
