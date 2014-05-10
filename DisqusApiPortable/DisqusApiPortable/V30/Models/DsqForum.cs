@@ -116,6 +116,26 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        #region Json-ignored properties
+
+        private bool? _isFollowing = null;
+        [JsonIgnore]
+        // Whether the user is following the forum. Null means not determined yet
+        public bool? IsFollowing
+        {
+            get { return _isFollowing; }
+            set
+            {
+                if (value != _isFollowing)
+                {
+                    _isFollowing = value;
+                    this.NotifyPropertyChanged("IsFollowing");
+                }
+            }
+        }
+
+        #endregion
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void NotifyPropertyChanged(string propertyName)
         {
