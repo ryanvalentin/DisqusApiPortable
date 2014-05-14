@@ -316,5 +316,17 @@ namespace Disqus.Api.V30.Models
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        #region Overrides
+
+        public override bool Equals(object obj)
+        {
+            if (obj is IDsqPost && ((IDsqPost)obj).Id == this.Id)
+                return true;
+
+            return false;
+        }
+
+        #endregion
     }
 }
