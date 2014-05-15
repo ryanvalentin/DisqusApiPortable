@@ -48,5 +48,7 @@ namespace Disqus.Api.V30.Models
         string ForumId { get; }
 
         string CurrentState { get; }
+
+        string ToTimelineKey();
     }
 }

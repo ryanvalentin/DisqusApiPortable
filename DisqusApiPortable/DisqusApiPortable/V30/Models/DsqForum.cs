@@ -145,6 +145,19 @@ namespace Disqus.Api.V30.Models
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        #region Methods
+
+        #region Overrides
+
+        public override string ToString()
+        {
+            return this.Id;
+        }
+
+        #endregion
+
+        #endregion
     }
 
     public class DsqFavicon : INotifyPropertyChanged

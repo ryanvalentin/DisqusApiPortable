@@ -35,5 +35,7 @@ namespace Disqus.Api.V30.Models
         bool IsVerified { get; }
 
         DsqAvatar Avatar { get; }
+
+        string ToTimelineKey();
     }
 }

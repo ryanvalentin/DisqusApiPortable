@@ -298,7 +298,33 @@ namespace Disqus.Api.V30.Models
             }
         }
 
-        #region Json-ignored properties for interface consistency
+        #region Json-ignored properties
+
+        #region JSON-ignored
+
+        private string _thumbnailUrl;
+        [JsonIgnore]
+        public string ThumbnailUrl
+        {
+            get { return _thumbnailUrl; }
+            set
+            {
+                if (value != _thumbnailUrl)
+                {
+                    _thumbnailUrl = value;
+
+                    if (_thumbnailUrl.StartsWith("//"))
+                        _thumbnailUrl = "http:" + _thumbnailUrl;
+
+                    this.NotifyPropertyChanged("ThumbnailUrl");
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public long ThumbnailSize { get; set; }
+
+        #endregion
 
         [JsonIgnore]
         public string ForumId { get; set; }
@@ -318,14 +344,24 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        #region Methods
+
         #region Overrides
 
-        public override bool Equals(object obj)
+        public override string ToString()
         {
-            if (obj is IDsqThread && ((IDsqThread)obj).Id == this.Id)
-                return true;
+            return this.Id;
+        }
 
-            return false;
+        #endregion
+
+        /// <summary>
+        /// Converts the object into a timeline key
+        /// </summary>
+        /// <returns>Timeline key, e.g. 'auth.User?id=xxxx'</returns>
+        public string ToTimelineKey()
+        {
+            return "forums.Thread?id=" + this.Id;
         }
 
         #endregion

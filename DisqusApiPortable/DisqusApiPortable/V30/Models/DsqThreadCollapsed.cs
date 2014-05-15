@@ -33,6 +33,9 @@ namespace Disqus.Api.V30.Models
             get { return _forum; }
             set
             {
+                if (value.Contains("="))
+                    value = value.Split('=')[1];
+
                 if (value != _forum)
                 {
                     _forum = value;

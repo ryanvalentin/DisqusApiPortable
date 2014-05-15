@@ -259,20 +259,25 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        #region Methods
+
         #region Overrides
 
-        public override bool Equals(object obj)
+        public override string ToString()
         {
-            if (obj is IDsqUser)
-            {
-                if (this.IsAnonymous)
-                    return base.Equals(obj);
+            // Return only the user ID
+            return this.Id;
+        }
 
-                if (((IDsqUser)obj).Id == this.Id)
-                    return true;
-            }
-            
-            return false;
+        #endregion
+
+        /// <summary>
+        /// Converts the object into a timeline key
+        /// </summary>
+        /// <returns>Timeline key, e.g. 'auth.User?id=xxxx'</returns>
+        public string ToTimelineKey()
+        {
+            return "auth.User?id=" + this.Id;
         }
 
         #endregion

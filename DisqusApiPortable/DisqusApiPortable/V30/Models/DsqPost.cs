@@ -317,14 +317,24 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        #region Methods
+
         #region Overrides
 
-        public override bool Equals(object obj)
+        public override string ToString()
         {
-            if (obj is IDsqPost && ((IDsqPost)obj).Id == this.Id)
-                return true;
+            return this.Id;
+        }
 
-            return false;
+        #endregion
+
+        /// <summary>
+        /// Converts the object into a timeline key
+        /// </summary>
+        /// <returns>Timeline key, e.g. 'auth.User?id=xxxx'</returns>
+        public string ToTimelineKey()
+        {
+            return "forums.Post?id=" + this.Id;
         }
 
         #endregion
