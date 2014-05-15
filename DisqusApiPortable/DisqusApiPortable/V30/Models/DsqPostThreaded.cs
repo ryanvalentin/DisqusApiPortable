@@ -1,6 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+
+#if WINDOWS_CLIENT
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+#endif
 
 namespace Disqus.Api.V30.Models
 {
@@ -8,14 +12,7 @@ namespace Disqus.Api.V30.Models
     {
         public DsqPostThreaded()
         {
-#if WINDOWS
-            this.UpvotingUsers = new ObservableCollection<DsqUser>();
-#endif
-        }
-
-        public DsqPostThreaded(IDsqPost post) : base(post)
-        {
-#if WINDOWS
+#if WINDOWS_CLIENT
             this.UpvotingUsers = new ObservableCollection<DsqUser>();
 #endif
         }
@@ -105,9 +102,42 @@ namespace Disqus.Api.V30.Models
             }
         }
 
-#if WINDOWS
+#if WINDOWS_CLIENT
         [JsonIgnore]
         public ObservableCollection<DsqUser> UpvotingUsers { get; set; }
+        
+        [JsonIgnore]
+        private int _queuedReplyCount;
+        /// <summary>
+        /// Number of reply comments waiting to be added to collection
+        /// </summary>
+        public int QueuedReplyCount
+        {
+            get { return _queuedReplyCount; }
+            set
+            {
+                if (value != _queuedReplyCount)
+                {
+                    _queuedReplyCount = value;
+                    this.NotifyPropertyChanged("QueuedReplyCount");
+                }
+            }
+        }
+
+        private ICommand _releaseQueuedReplies;
+        public ICommand ReleaseQueuedReplies
+        {
+            get { return _releaseQueuedReplies; }
+            set
+            {
+                if (value != _releaseQueuedReplies)
+                {
+                    _releaseQueuedReplies = value;
+                    this.NotifyPropertyChanged("ReleaseQueuedReplies");
+                }
+            }
+        }
+
 #endif
 
         #endregion
