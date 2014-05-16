@@ -10,13 +10,6 @@ namespace Disqus.Api.V30.Models
 {
     public class DsqPostThreaded : DsqPost
     {
-        public DsqPostThreaded()
-        {
-#if WINDOWS_CLIENT
-            this.UpvotingUsers = new ObservableCollection<DsqUser>();
-#endif
-        }
-
         /// <summary>
         /// Threaded comments can expand a forum, but we don't really need to
         /// </summary>
@@ -85,8 +78,6 @@ namespace Disqus.Api.V30.Models
         [JsonProperty(PropertyName = "parent")]
         public string Parent { get; set; }
 
-        #region JSON ignored properties
-
         private IDsqPost _parentPost;
         [JsonIgnore]
         public IDsqPost ParentPost
@@ -101,45 +92,5 @@ namespace Disqus.Api.V30.Models
                 }
             }
         }
-
-#if WINDOWS_CLIENT
-        [JsonIgnore]
-        public ObservableCollection<DsqUser> UpvotingUsers { get; set; }
-        
-        [JsonIgnore]
-        private int _queuedReplyCount;
-        /// <summary>
-        /// Number of reply comments waiting to be added to collection
-        /// </summary>
-        public int QueuedReplyCount
-        {
-            get { return _queuedReplyCount; }
-            set
-            {
-                if (value != _queuedReplyCount)
-                {
-                    _queuedReplyCount = value;
-                    this.NotifyPropertyChanged("QueuedReplyCount");
-                }
-            }
-        }
-
-        private ICommand _releaseQueuedReplies;
-        public ICommand ReleaseQueuedReplies
-        {
-            get { return _releaseQueuedReplies; }
-            set
-            {
-                if (value != _releaseQueuedReplies)
-                {
-                    _releaseQueuedReplies = value;
-                    this.NotifyPropertyChanged("ReleaseQueuedReplies");
-                }
-            }
-        }
-
-#endif
-
-        #endregion
     }
 }
