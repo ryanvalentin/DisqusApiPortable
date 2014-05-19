@@ -48,9 +48,7 @@ namespace Disqus.Api.V30
             if (this.DefaultRequestHeaders.Contains("ContentType"))
                 this.DefaultRequestHeaders.Remove("ContentType");
 
-            string errorMessage = "";
-            int? code = null;
-            FaultType fault = FaultType.Undetermined;
+            DsqApiException apiException = null;
 
             try
             {
@@ -62,47 +60,22 @@ namespace Disqus.Api.V30
                 }
                 else
                 {
-                    try
-                    {
-                        string raw = await response.Content.ReadAsStringAsync();
-
-                        JObject json = JObject.Parse(raw);
-
-                        errorMessage = (string)json["response"];
-                        code = (int)json["code"];
-                        fault = GetFaultType(code ?? 0);
-                    }
-                    catch (Exception ex)
-                    {
-                        errorMessage = response.Content.ReadAsStringAsync().Result + ";" + ex.Message;
-                        code = (int)response.StatusCode;
-                        fault = GetFaultType(code ?? 0);
-                    }
+                    apiException = await GetExceptionFromResponse(response);
                 }
             }
             catch (OperationCanceledException ex)
             {
-                if (!ex.CancellationToken.IsCancellationRequested)
-                {
-                    errorMessage = ex.Message;
-                    code = 16;
-                    fault = FaultType.Timeout;
-                }
-                else
-                {
-                    errorMessage = ex.Message;
-                    code = null;
-                    fault = FaultType.ClientRequest;
-                }
+                apiException = GetTaskCancelledException(ex);
             }
             catch (Exception ex)
             {
-                errorMessage = ex.Message;
-                code = null;
-                fault = FaultType.Undetermined;
+                apiException = new DsqApiException(
+                    ex.Message,
+                    null,
+                    FaultType.Undetermined);
             }
 
-            throw new DsqApiException(errorMessage, null, GetFaultType(code ?? 0));
+            throw apiException;
         }
 
         /// <summary>
@@ -121,9 +94,8 @@ namespace Disqus.Api.V30
             if (!this.DefaultRequestHeaders.Contains("ContentType"))
                 this.DefaultRequestHeaders.Add("ContentType", "application/x-www-form-urlencoded");
 
-            string errorMessage = "";
-            int? code = null;
-            FaultType fault = FaultType.Undetermined;
+
+            DsqApiException apiException = null;
 
             try
             {
@@ -135,47 +107,22 @@ namespace Disqus.Api.V30
                 }
                 else
                 {
-                    try
-                    {
-                        string raw = await response.Content.ReadAsStringAsync();
-
-                        JObject json = JObject.Parse(raw);
-
-                        errorMessage = (string)json["response"];
-                        code = (int)json["code"];
-                        fault = GetFaultType(code ?? 0);
-                    }
-                    catch (Exception ex)
-                    {
-                        errorMessage = response.Content.ReadAsStringAsync().Result + ";" + ex.Message;
-                        code = (int)response.StatusCode;
-                        fault = GetFaultType(code ?? 0);
-                    }
+                    apiException = await GetExceptionFromResponse(response);
                 }
             }
             catch (OperationCanceledException ex)
             {
-                if (!ex.CancellationToken.IsCancellationRequested)
-                {
-                    errorMessage = ex.Message;
-                    code = 16;
-                    fault = FaultType.Timeout;
-                }
-                else
-                {
-                    errorMessage = ex.Message;
-                    code = null;
-                    fault = FaultType.ClientRequest;
-                }
+                apiException = GetTaskCancelledException(ex);
             }
             catch (Exception ex)
             {
-                errorMessage = ex.Message;
-                code = null;
-                fault = FaultType.Undetermined;
+                apiException = new DsqApiException(
+                    ex.Message, 
+                    null, 
+                    FaultType.Undetermined);
             }
 
-            throw new DsqApiException(errorMessage, null, GetFaultType(code ?? 0));
+            throw apiException;
         }
 
         private T DeserializeStreamToObjectAsync<T>(StreamReader stream)
@@ -188,6 +135,54 @@ namespace Disqus.Api.V30
                 // Return serialized JSON
                 return serializer.Deserialize<T>(reader);
             }
+        }
+
+        private async Task<DsqApiException> GetExceptionFromResponse(HttpResponseMessage response)
+        {
+            DsqApiException apiException = null;
+
+            try
+            {
+                string raw = await response.Content.ReadAsStringAsync();
+
+                JObject json = JObject.Parse(raw);
+
+                apiException = new DsqApiException(
+                    (string)json["response"],
+                    (int)json["code"],
+                    GetFaultType((int)json["code"]));
+            }
+            catch (Exception ex)
+            {
+                apiException = new DsqApiException(
+                    response.Content.ReadAsStringAsync().Result + ";" + ex.Message,
+                    (int)response.StatusCode,
+                    GetFaultType((int)response.StatusCode));
+            }
+
+            return apiException;
+        }
+
+        private DsqApiException GetTaskCancelledException(OperationCanceledException ex)
+        {
+            DsqApiException apiException = null;
+
+            if (!ex.CancellationToken.IsCancellationRequested)
+            {
+                apiException = new DsqApiException(
+                    ex.Message,
+                    16,
+                    FaultType.Timeout);
+            }
+            else
+            {
+                apiException = new DsqApiException(
+                    ex.Message,
+                    null,
+                    FaultType.ClientRequest);
+            }
+
+            return apiException;
         }
 
         private FaultType GetFaultType(int errorOrStatusCode)
