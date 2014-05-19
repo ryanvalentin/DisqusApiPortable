@@ -258,7 +258,7 @@ namespace Disqus.Api.V30
             //
             // Intercept authenticated requests
             if (!String.IsNullOrEmpty(DisqusAuthentication.AccessToken))
-                throw new DsqApiException("Authenticated users can't create guest comments. Use the other CreatePostAsync overload to post authenticated comments", 17);
+                throw new DsqApiException("Authenticated users can't create guest comments. Use the other CreatePostAsync overload to post authenticated comments", 17, FaultType.ClientRequest);
 
             List<KeyValuePair<string, string>> arguments = PostAuthentication();
             arguments = PostArgument(arguments, "message", message, true);
@@ -776,7 +776,7 @@ namespace Disqus.Api.V30
         public async Task<DsqObjectResponse<DsqThreadExpanded>> GetThreadDetailsAsync(string threadIdentifier, string forum)
         {
             if (String.IsNullOrEmpty(forum))
-                throw new DsqApiException("Invalid value for 'forum'. To look up a thread by custom identifier you must also pass a valid 'forum'", 2);
+                throw new DsqApiException("Invalid value for 'forum'. To look up a thread by custom identifier you must also pass a valid 'forum'", 2, FaultType.ClientRequest);
 
             return await GetTDetailsAsync("ident:" + threadIdentifier, forum);
         }
@@ -791,10 +791,10 @@ namespace Disqus.Api.V30
         public async Task<DsqObjectResponse<DsqThreadExpanded>> GetThreadDetailsAsync(Uri url, string forum)
         {
             if (!url.IsAbsoluteUri)
-                throw new DsqApiException("Invalid value for 'url', was: '" + url.OriginalString + "'", 2);
+                throw new DsqApiException("Invalid value for 'url', was: '" + url.OriginalString + "'", 2, FaultType.ClientRequest);
 
             if (String.IsNullOrEmpty(forum))
-                throw new DsqApiException("Invalid value for 'forum'. To look up a thread by URL you must also pass a valid 'forum'", 2);
+                throw new DsqApiException("Invalid value for 'forum'. To look up a thread by URL you must also pass a valid 'forum'", 2, FaultType.ClientRequest);
 
             return await GetTDetailsAsync("link:" + url.OriginalString, forum);
         }
@@ -951,7 +951,7 @@ namespace Disqus.Api.V30
         public async Task<DsqListCursorResponse<DsqPostThreaded>> ListThreadPostsAsync(string threadIdentifier, string forum, List<string> include, string order = "desc", string cursor = "", int limit = 25)
         {
             if (String.IsNullOrEmpty(forum))
-                throw new DsqApiException("Invalid value for 'forum'. To look up a thread by custom identifier you must also pass a valid 'forum'", 2);
+                throw new DsqApiException("Invalid value for 'forum'. To look up a thread by custom identifier you must also pass a valid 'forum'", 2, FaultType.ClientRequest);
 
             return await GetThreadPostsAsync("ident:" + threadIdentifier, include, forum, order, cursor, limit);
         }
@@ -970,10 +970,10 @@ namespace Disqus.Api.V30
         public async Task<DsqListCursorResponse<DsqPostThreaded>> ListThreadPostsAsync(Uri url, string forum, List<string> include, string order = "desc", string cursor = "", int limit = 25)
         {
             if (!url.IsAbsoluteUri)
-                throw new DsqApiException("Invalid value for 'url', was: '" + url.OriginalString + "'", 2);
+                throw new DsqApiException("Invalid value for 'url', was: '" + url.OriginalString + "'", 2, FaultType.ClientRequest);
 
             if (String.IsNullOrEmpty(forum))
-                throw new DsqApiException("Invalid value for 'forum'. To look up a thread by URL you must also pass a valid 'forum'", 2);
+                throw new DsqApiException("Invalid value for 'forum'. To look up a thread by URL you must also pass a valid 'forum'", 2, FaultType.ClientRequest);
 
             return await GetThreadPostsAsync("link:" + url.OriginalString, include, forum, order, cursor, limit);
         }
@@ -1169,7 +1169,7 @@ namespace Disqus.Api.V30
         public async Task<DsqObjectResponse<DsqUser>> UpdateUsernameAsync(string new_username)
         {
             if (new_username.Length < 3 || new_username.Length > 30)
-                throw new DsqApiException("New username doesn't satisfy length requirements, must be 3 or more characters and up to 30. Was: " + new_username.Length.ToString(), 2);
+                throw new DsqApiException("New username doesn't satisfy length requirements, must be 3 or more characters and up to 30. Was: " + new_username.Length.ToString(), 2, FaultType.ClientRequest);
 
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "username", new_username, true);
@@ -1424,7 +1424,7 @@ namespace Disqus.Api.V30
         public async Task<DsqObjectResponse<DsqUser>> UpdateUserProfileAsync(string name, string about, string location, string url)
         {
             if (name.Length < 2 || name.Length > 30)
-                throw new DsqApiException("New name doesn't satisfy length requirements, must be 2 or more characters and up to 30. Was: " + name.Length.ToString(), 2);
+                throw new DsqApiException("New name doesn't satisfy length requirements, must be 2 or more characters and up to 30. Was: " + name.Length.ToString(), 2, FaultType.ClientRequest);
 
             List<KeyValuePair<string, string>> arguments = PostAuthentication(true);
             arguments = PostArgument(arguments, "name", name);
@@ -1551,7 +1551,7 @@ namespace Disqus.Api.V30
         protected string GetAuthentication(bool authenticationRequired = false)
         {
             if (authenticationRequired && String.IsNullOrEmpty(DisqusAuthentication.AccessToken))
-                throw new DsqApiException("You must be authenticated to perform this action", 4);
+                throw new DsqApiException("You must be authenticated to perform this action", 4, FaultType.InsufficientAccess);
 
             string authQuery = "?api_key=" + DisqusAuthentication.ApiKey;
 
@@ -1576,18 +1576,18 @@ namespace Disqus.Api.V30
             //
             // Validate the arguments to make sure they're populated if required, or a valid value
             if (required && !hasValue)
-                throw new DsqApiException(String.Format("Argument '{0}' is required. Was: '{1}'", key, value), 2);
+                throw new DsqApiException(String.Format("Argument '{0}' is required. Was: '{1}'", key, value), 2, FaultType.ClientRequest);
 
             if (hasValue)
             {
                 if (key == "order" && !_validOrders.Any(value.Contains))
-                    throw new DsqApiException("Invalid value for argument 'order'. Must be 'asc' or 'desc', or if requesting popular posts, must be 'popular' or 'best'", 2);
+                    throw new DsqApiException("Invalid value for argument 'order'. Must be 'asc' or 'desc', or if requesting popular posts, must be 'popular' or 'best'", 2, FaultType.ClientRequest);
 
                 if (key == "include" && !_validInclude.Any(value.Contains))
-                    throw new DsqApiException("Invalid value for argument 'include'. If requesting posts, the following are valid: 'approved', 'unapproved', 'flagged', 'deleted' and 'spam'. If requesting threads, the following are valid: 'open', 'closed' and 'killed'", 2);
+                    throw new DsqApiException("Invalid value for argument 'include'. If requesting posts, the following are valid: 'approved', 'unapproved', 'flagged', 'deleted' and 'spam'. If requesting threads, the following are valid: 'open', 'closed' and 'killed'", 2, FaultType.ClientRequest);
 
                 if (key == "interval" && !_validIntervals.Any(value.Contains))
-                    throw new DsqApiException("Invalid value for argument 'include'. Choices are '1h', '6h', '12h', '1d', '3d', '7d', '30d', '60d', '90d'");
+                    throw new DsqApiException("Invalid value for argument 'include'. Choices are '1h', '6h', '12h', '1d', '3d', '7d', '30d', '60d', '90d'", 2, FaultType.ClientRequest);
 
                 return String.Format("&{0}={1}", key, value);
             }
@@ -1598,7 +1598,7 @@ namespace Disqus.Api.V30
         protected List<KeyValuePair<string, string>> PostAuthentication(bool authenticationRequired = false)
         {
             if (authenticationRequired && String.IsNullOrEmpty(DisqusAuthentication.AccessToken))
-                throw new DsqApiException("You must be authenticated to perform this action", 4);
+                throw new DsqApiException("You must be authenticated to perform this action", 4, FaultType.InsufficientAccess);
 
             List<KeyValuePair<string, string>> arguments = new List<KeyValuePair<string, string>>();
             arguments.Add(new KeyValuePair<string, string>("api_key", DisqusAuthentication.ApiKey));
@@ -1617,7 +1617,7 @@ namespace Disqus.Api.V30
             bool hasValue = !String.IsNullOrWhiteSpace(value);
 
             if (required && !hasValue)
-                throw new DsqApiException(String.Format("Argument '{0}' is required. Was: '{1}'", key, value), 2);
+                throw new DsqApiException(String.Format("Argument '{0}' is required. Was: '{1}'", key, value), 2, FaultType.ClientRequest);
 
             if (hasValue)
                 existingList.Add(new KeyValuePair<string, string>(key, value));

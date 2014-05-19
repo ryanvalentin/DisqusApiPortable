@@ -5,9 +5,9 @@ namespace Disqus.Api.V30.Models
     public class DsqApproxLoc
     {
         [JsonProperty(PropertyName = "lat")]
-        public double lat { get; set; }
+        public double Lat { get; set; }
 
         [JsonProperty(PropertyName = "lng")]
-        public double lng { get; set; }
+        public double Lng { get; set; }
     }
 }
