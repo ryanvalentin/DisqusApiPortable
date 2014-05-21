@@ -978,6 +978,18 @@ namespace Disqus.Api.V30
             return await GetThreadPostsAsync("link:" + url.OriginalString, include, forum, order, cursor, limit);
         }
 
+        public async Task<DsqListCursorResponse<T>> ListApprovedThreadPostsAsync<T>(string thread, string cursor = "", int limit = 25, string order = "desc")
+        {
+            string endpoint = Constants.Endpoints.Threads.ListPosts
+                + GetAuthentication()
+                + GetArgument("thread", thread)
+                + GetArgument("cursor", cursor)
+                + GetArgument("order", cursor)
+                + GetArgument("limit", ClampLimit(limit));
+
+            return await _dsqHttpClient.GetDsqDataAsync<DsqListCursorResponse<T>>(endpoint);
+        }
+
         /// <summary>
         /// Private method to get thread posts
         /// </summary>
