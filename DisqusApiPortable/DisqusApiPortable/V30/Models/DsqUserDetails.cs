@@ -79,6 +79,21 @@ namespace Disqus.Api.V30.Models
             }
         }
 
+        private int _numForumsFollowing;
+        [JsonProperty(PropertyName = "numForumsFollowing")]
+        public int NumForumsFollowing
+        {
+            get { return _numForumsFollowing; }
+            set
+            {
+                if (value != _numForumsFollowing)
+                {
+                    _numForumsFollowing = value;
+                    this.NotifyPropertyChanged("NumForumsFollowing");
+                }
+            }
+        }
+
         private int _numLikesReceived;
         [JsonProperty(PropertyName = "numLikesReceived")]
         public int NumLikesReceived
